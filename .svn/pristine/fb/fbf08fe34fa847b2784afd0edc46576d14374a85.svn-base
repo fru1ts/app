@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>注册页面</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <style>
+          .flex-con{
+            background-image:url('../image/1.jpg') ;
+            background-size:cover;
+            background-attachment:fixed; 
+            height: 100%;
+}
+        .empty{ text-align: center; padding: 120px 0; }
+        header{ background-color: #0d78db; }
+        header ul li { height: 50px; line-height: 50px; text-align: center; display: none; color: #fff; position: relative;font-size: 18px;  }
+        header ul li.active{ display: block; }
+    </style>
+</head>
+<body>
+    <header>
+        <ul>
+            <li class="border-b active" >注册</li>   <!--顶部导航栏样式-->
+        </ul>
+    </header>
+    <div id="main" class="flex-con">  
+        <div class="register-container container">   <!--限制页面大小-->
+            <div class="row">
+                <div class="register span6">
+                    <form action="" method="post">
+                        <h1> <span class="red" ><strong>用户注册</strong></span></h1>
+                    </br>
+                        <label for="username">用户名</label>
+                        <input type="text" id="username" name="username" placeholder="请输入用户名...">
+                        <label for="email">邮箱</label>
+                        <input type="text" id="email" name="email" placeholder="请输入邮箱...">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" name="password" placeholder="请输入密码...">
+                        <label for="name">验证码</label>
+                        <input type="text" id="name" name="name" placeholder="请输入密码...">
+                </br>
+                        <button type="submit">注册</button>
+                    
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+          
+    </div>
+    
+</body>
+</html>
+<script type="text/javascript" src="../script/api.js"></script> <!--JS部分-->
+<script type="text/javascript">
+    apiready = function () {
+        $api.fixStatusBar( $api.dom('header') ),
+        api.setStatusBarStyle({
+            style: 'dark',
+            color: '#6ab494'
+        });  
+    }
+</script>

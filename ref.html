@@ -1,0 +1,185 @@
+<script type="text/javascript" src="./script/api.js"></script>
+
+<script type="text/javascript">
+	apiready = function() {
+		//此处为app当前页面加载完成后执行的代码	
+	}
+</script>
+
+<script type="text/javascript">
+	apiready = function() {
+		api.openFrame({
+				name : 'abc',
+				url : 'index.html',
+				rect : {
+					x : 0,
+					y : 0,
+					w : api.winWidth,
+					h : api.winHeight
+				},
+				pageParam : {
+				},
+				bounces : true,
+				bgColor : 'rgba(0,0,0,0)',
+				vScrollBarEnabled : false,
+				hScrollBarEnabled : false
+		});
+	}
+</script>
+
+<script type="text/javascript">
+	apiready = function() {
+		api.closeFrame({
+		    name: 'abc'
+		});
+	}
+</script>
+
+<script type="text/javascript">
+	apiready = function() {
+		api.openWin({
+		        name: 'name',
+		        url: '123.html',
+		        opaque: true,
+		        vScrollBarEnabled: false
+		});	
+	}
+</script>
+
+<script type="text/javascript">
+	apiready = function() {
+		//关闭当前window，使用默认动画
+		api.closeWin();
+
+		//关闭指定window，若待关闭的window不在最上面，则无动画
+		api.closeWin({
+			name: 'page1'
+		});
+	}
+</script>
+
+<script type="text/javascript">
+	apiready = function() {
+		api.openFrameGroup({
+		    name : 'group',
+		    scrollEnabled : false,
+		    rect : {
+		        x : 0,
+		        y : header_h,
+		        w : 'auto',
+		        h : rect_h
+		    },
+		    index : 0,
+		    frames : [{
+		        name : 'frame1',
+		        url : 'html/frame1.html'
+		    }, {
+		        name : 'frame2',
+		        url : 'html/frame2.html'
+		    }, {
+		        name : 'frame3',
+		        url : 'html/frame3.html'
+		    }, {
+		        name : 'frame4',
+		        url : 'html/frame4.html'
+		    }]
+		}, function(ret, err) {
+		});	
+	}
+</script>
+
+<script type="text/javascript">
+	apiready = function() {
+		$api.setStorage('username','棒棒团');
+		//将username数据保存到本地
+		$api.setStorage('uid','123');
+		//将uid数据保存到本地	
+	}
+</script>
+
+<script type="text/javascript">
+	apiready = function() {
+		if(!$api.getStorage('uid') || !$api.getStorage('username')){
+				//能获取本地存储的uid或者username数据
+		}else{
+				//不能获取本地存储的uid或者username数据
+		}	
+	}
+</script>
+
+<script type="text/javascript">
+	apiready = function() {
+		$api.rmStorage('uid');
+		$api.rmStorage('username');
+		$api.clearStorage ();
+	}
+</script>
+
+<script type="text/javascript">
+	apiready = function() {
+		initpage();
+		api.setRefreshHeaderInfo({
+	        visible: true,
+	        // loadingImgae: 'wgt://image/refresh-white.png',
+	        bgColor: '#f2f2f2',
+	        textColor: '#4d4d4d',
+	        textDown: '下拉刷新...',
+	        textUp: '松开刷新...',
+	        showTime: true
+	    }, function(ret, err){
+	    		//重新执行页面初始化代码
+	    		api.refreshHeaderLoadDone();  
+	    });	
+	}
+</script>
+
+<div id="liebiao"></div>
+<script type="text/javascript">
+	apiready = function() {
+		api.showProgress({
+	        title: '课程加载中...',
+	        modal: false
+	    });
+		var html = '';
+	    api.ajax({
+		    url:'abc.php', //DISCUZ端php查询语句，以JSON输出
+		    dataType: 'json'
+	    },function(ret,err){
+	        if (ret) {
+	            var obj = $api.byId('liebiao');
+	            for (var i = 0, len = ret.length; i < len; i++) {
+	            	var thisItem = ret[i];
+	            	var nType = thisItem.type;
+	            	html += '具体内容显示代码';
+	            	}
+				$api.html(obj, html);
+				api.hideProgress();
+				api.refreshHeaderLoadDone();
+	        } else {
+	           	alert(JSON.stringify(err));
+	           	api.hideProgress();
+	        }
+	    });	
+	}
+</script>
+
+<script type="text/javascript">
+	apiready = function() {
+		   var url = location.search; //获取url中"?"符后的字串
+		   var theRequest = new Object();
+		   if (url.indexOf("?") != -1) {
+		      var str = url.substr(1);     
+		      strs = str.split("=");
+		      for(var i = 0; i < strs.length; i ++) {
+		         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[2]);
+		      }
+		   }
+		   var id = strs[1].split("=")[0];
+	       api.ajax({
+		       url:'http://www.banban.so/abc.php?id='+id,
+		       dataType: 'json',
+	       },function(ret,err){
+	    	
+	       });
+	}
+</script>
