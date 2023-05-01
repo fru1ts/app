@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
-    <meta name="format-detection"   content="telephone=no,email=no,date=no,address=no">
-    <title>粤辞</title>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>软件名称</title>
     <link rel="stylesheet" type="text/css" href="./css/api.css" />
     <!--引入css文件-->
     <link rel="stylesheet" type="text/css" href="./css/style.css" />
     <script src="../script/fun.js"></script>
-    <style> 
+    <style>
         header {
-            background-color: #ff7f27dc;
+            background-color: #0d78db;
         }
 
         header ul li {
@@ -95,10 +95,10 @@
     <div id="wrap" class="flex-wrap flex-vertical">
         <header>
             <ul>
-                <li class="border-b active">首页</li>
+                <li class="border-b active">软件名称</li>
                 <!--顶部导航栏样式-->
-                <li class="border-b">练习</li>
-                <li class="border-b">文化</li>
+                <li class="border-b">端API</li>
+                <li class="border-b">开发</li>
                 <li class="border-b">我的</li>
             </ul>
         </header>
@@ -107,9 +107,9 @@
         <div id="footer" class="border-t">
             <!--底部导航栏-->
             <ul class="flex-wrap">
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active">首页</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">练习</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">文化</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active">云文档</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">端API</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">开发</li>
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">我的</li>
                 <!-- 这里可以继续添加菜单 -->
             </ul>
