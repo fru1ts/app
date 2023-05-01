@@ -13,7 +13,7 @@
             background-image:url('../image/1.jpg') ;
             background-size:cover;
             background-attachment:fixed; 
-            height: 100%;
+            height: 90%;
 }
         .empty{ text-align: center; padding: 120px 0; }
         header{ background-color: #0d78db; }
@@ -23,11 +23,11 @@
 </head>
 <body>
        <!--顶部导航栏样式-->
-    <!-- <header>
+    <header>
         <ul>
             <li class="border-b active" ><input class="back" type="button"  onclick="api.closeWin();">登录<input style="float: right;width: 10%;" type="button" ></li>
         </ul>
-    </header> -->
+    </header>
     <div id="main" class="flex-con">  
         <div class="register-container container">   <!--限制页面大小-->
             <div class="row">
@@ -42,7 +42,7 @@
                 </br>
                         <button type="submit">登录</button>
                     <!-- <div><a href="register.html">未注册账号??</a> </div> -->
-                    <div onclick="openWin('register.html','register','null','注册');">未注册账号??</div>
+                    <div onclick="jump('register');">未注册账号??</div>
                     </form>
                 </div>
             </div>
@@ -52,7 +52,6 @@
     </div>
     
 </body>
-
 </html>
 <script type="text/javascript" src="../script/api.js"></script> <!--JS部分-->
 <script type="text/javascript">

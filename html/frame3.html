@@ -1,36 +1,68 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>我的</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <script src="../script/fun.js"></script>
     <style>
-        .empty{ text-align: center; padding: 120px 0; }
-
+        .empty {
+            text-align: center;
+            padding: 120px 0;
+        }
     </style>
-    
+
 </head>
+
 <body>
     <div id="main" class="flex-con">
-    <div class="trans" style="top:40px" onclick="jump('register','')">
+        <!-- <div class="trans" style="top:40px" onclick="openWin('register.html','register','null','登录')">
 		<div class="left"><img src="../image/bottombtn0201.png"></div>
 		<div class="middle">注册</div>
 		<div class="right"><img src="../image/bottombtn0301.png"></div>
-	</div>
-    <div class="trans" style="top:82px" onclick="jump('login','')">  
-		<div class="left"><img src="../image/bottombtn0201.png"></div>
-		<div class="middle">登录</div>
-		<div class="right"><img src="../image/bottombtn0301.png"></div>
-	</div>
-</div>
+	</div> -->
+        <div class="trans" style="top:82px" onclick="openWin('login.html','login','null','登录')">
+            <div class="left"><img src="../image/bottombtn0201.png"></div>
+            <div class="middle">登录</div>
+            <div class="right"><img src="../image/bottombtn0301.png"></div>
+        </div>
+    </div>
 </body>
+
 </html>
 <!--JS部分-->
-<script type="text/javascript" src="script/api.js"></script> 
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#C0C0C0',
+            isScale: true,
+            textDown: '下拉刷新...',
+            textUp: '松开刷新...',
+            textLoading: '正在刷新...'
+        }, function (ret, err) {
+            // 刷新回调函数
+            // 在这里写下拉刷新时要执行的操作
+            // ...
+            // 刷新成功，关闭下拉刷新控件
+            setTimeout(function () {
+                api.toast({
+                msg: '刷新成功',
+                duration: 2000,
+                location: 'middle'
+            });
+                api.refreshHeaderLoadDone()
+            }, 1000);
+        });
+    
+    }
+
+</script>
 
 
 <!-- <script type="text/javascript">

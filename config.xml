@@ -1,4 +1,4 @@
-<widget id="A6124870967305" version="0.0.1">
+<widget id="A6124467791525" version="0.0.1">
 
 	<name>demo</name>
 
@@ -33,6 +33,8 @@
 	<preference name="debug" value="true"/>
 
 	<preference name="statusBarAppearance" value="true"/>
+	
+	<preference name="customRefreshHeader" value="UIPullRefreshFlash"/>
 
 	<permission name="readPhoneState"/>
 
