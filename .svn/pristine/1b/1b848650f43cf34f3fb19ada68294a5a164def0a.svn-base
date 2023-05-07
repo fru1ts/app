@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>我的</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <script src="../script/fun.js"></script>
+    <style>
+            	html, body {width: 100%;min-height: 100%;background: #f0f0f0;}
+    	.h10 {height: 10px;background: #f0f0f0;}
+		.h1 {height: 1px;margin-left: 15px;background: #f0f0f0;}
+		.fr {float: right;}
+		.hint {color: #666;font-size: 12px;margin-right: 5px;}
+
+		.firstblock, .secondblock, .thirdblock {background-color: #fff;}
+        /* 头部样式 */
+		.head {background-image: url(../../image/personal_bkg.jpg);background-repeat: no-repeat; background-size: contain;position: relative;}
+		.headbg {/*position: absolute;*/ width: 100%;}
+		.head .personal_logo {position: absolute; top: 60px; width: 70px; left: 20px;}
+		.person_arrow {position: absolute;height: 20px; right: 10px; top: 90px;}
+		.head .userinfo {position: absolute; top: 60px; margin-left: 100px;}
+		.head .userinfo .title {font-size: 20px; color: #fff;}
+		.head .userinfo .subtitle {font-size: 14px; color: #fff;border: 1px solid #fff;display: inline-block;padding: 10px;border-radius: 4px;margin-top: 5px;}
+        /* 设置条目 */
+		.item {height: 50px;line-height: 50px;padding-left: 15px;background-color: #fff;}
+		.item_ico {float: left;width: 30px;padding: 10px 10px 10px 0;}
+		.item_arrow {float: right;width: 16px;padding: 17px 15px 15px 0;}
+
+		.presshover {background-color: #FAFAFA;}
+    
+    </style>
+
+</head>
+
+<body>
+    <div class="head"  tapmode="" >
+		<img src="../image/personal_bkg.jpg" alt="" class="headbg">
+		<img src="../image/profile_default.png" alt="" class="personal_logo">
+		<div class="userinfo">
+			<div class="subtitle">用户名：XXX</div>
+		</div>
+	</div>
+
+    ]<!-- 第一块 -->
+	<div class="firstblock">
+		<div class="item" tapmode="presshover" onclick="openWord()">
+			<img src="../image/my_favorite_user_icon_normal.png" alt="" class="item_ico">
+			<span>我的单词本</span>
+			<img src="../image/arrow.png" alt="" class="item_arrow">
+		</div><div class="h1"></div>
+		<div class="item" tapmode="presshover" onclick="openRecord()">
+			<img src="../image/my_record_user_icon.png" alt="" class="item_ico">
+			<span>学习记录</span>
+			<img src="../image/arrow.png" alt="" class="item_arrow">
+		</div><div class="h1"></div>
+	</div>
+    <!-- 第二块 -->
+	<div class="h10"></div>
+	<div class="secondblock">
+		<div class="item" tapmode="presshover" onclick="openAbout()">
+			<img src="../image/my_about_user_icon.png" alt="" class="item_ico">
+			<span>关于我们</span>
+			<img src="../image/arrow.png" alt="" class="item_arrow">
+		</div><div class="h1"></div>
+		<div class="item" tapmode="presshover" onclick="openState()">
+			<img src="../image/my_state_user_icon_normal.png" alt="" class="item_ico">
+			<span>说明帮助</span>
+			<img src="../image/arrow.png" alt="" class="item_arrow">
+		</div><div class="h1"></div>
+	</div>
+    <!-- <div id="main" class="flex-con"> -->
+        <!-- <div class="trans" style="top:40px" onclick="openWin('register.html','register','null','登录')">
+		<div class="left"><img src="../image/bottombtn0201.png"></div>
+		<div class="middle">注册</div>
+		<div class="right"><img src="../image/bottombtn0301.png"></div>
+	</div> -->
+        <!-- <div class="trans" style="top:82px" onclick="openWin('login.html','login','null','登录')">
+            <div class="left"><img src="../image/bottombtn0201.png"></div>
+            <div class="middle">登录</div>
+            <div class="right"><img src="../image/bottombtn0301.png"></div>
+        </div> -->
+    <!-- </div> -->
+</body>
+
+</html>
+<!--JS部分-->
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript">
+
+	function openWord()
+	{
+		api.openWin({
+			name: 'word',
+			url: './my/word.html',
+			bounces: false,
+			delay:200
+		});
+	}
+	function openRecord()
+	{
+		api.openWin({
+			name: 'record',
+			url: './my/word.html',
+			bounces: false,
+			delay:200
+		});
+	}
+	function openAbout()
+	{
+		api.openWin({
+			name: 'about',
+			url: './my/about.html',
+			bounces: false,
+			delay:200
+		});
+	}
+	function openState()
+	{
+		api.openWin({
+			name: 'state',
+			url: './my/state.html',
+			bounces: false,
+			delay:200
+		});
+	}
+</script>
+
+
+<!-- <script type="text/javascript">
+	function jump(string) {		
+            api.openWin({
+                name: string,//需要跳转的页面名字
+                url: string+'.html',//需要跳转的页面路径
+                pageParam: {
+                }
+            });
+    } -->
+</script>
