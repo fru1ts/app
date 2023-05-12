@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>练习</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin: 20px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            transform: translateZ(10px);
+            transition: transform 0.3s;
+            height: 80px;
+            width: 300px;
+        }
+
+        .box:hover {
+            transform: translateZ(20px);
+        }
+
+        .box-1 {
+            background-color: #0a76be;
+        }
+
+        .box-2 {
+            background-color: #e91e63;
+        }
+
+        .box-3 {
+            background-color: #4caf50;
+        }
+
+        .box-4 {
+            background-color: #ff9800;
+        }
+
+        .text {
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        .button {
+            width: auto;
+            height: 50px;
+            margin-left: 32px;
+            margin-right: 32px;
+            margin-top: 16px;
+            background-color: #ff7f27dc;
+            line-height: 50px;
+            color: #fff;
+            font-size: 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="box box-1" onclick="openadd()">
+            <div class="text">增加数据</div>
+        </div>
+        <div class="box box-2" onclick="opendelete()">
+            <div class="text">删除数据</div>
+        </div>
+        <div class="box box-3" onclick="openmodify()">
+            <div class="text">修改数据</div>
+        </div>
+        <div class="box box-4" onclick="opensearch()">
+            <div class="text">查看数据</div>
+        </div>
+
+    </div>
+    <div class="button" tapmode onclick="fnLogout();">退出登录</div>
+</body>
+
+</html>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+
+    function openadd() {
+        api.openWin({
+            name: 'add',
+            url: './admin/add.html',
+            bounces: false,
+            delay: 200
+        });
+    }
+    function opendelete() {
+        api.openWin({
+            name: 'delete',
+            url: './admin/delete.html',
+            bounces: false,
+            delay: 200
+        });
+    }
+    function openmodify() {
+        api.openWin({
+            name: 'modify',
+            url: './admin/modify.html',
+            bounces: false,
+            delay: 200
+        });
+    }
+    function opensearch() {
+        api.openWin({
+            name: 'search',
+            url: './admin/search.html',
+            bounces: false,
+            delay: 200
+        });
+    }
+    // 退出登录函数
+    function fnLogout() {
+        api.confirm({
+            title: '提示',
+            msg: '是否退出登录',
+            buttons: ['确定', '取消']
+        }, function (ret, err) {
+            if (ret) {
+                if (1 == ret.buttonIndex) {
+                    $api.rmStorage('userInfo');
+                    api.closeWin()
+                }
+            }
+        });
+    }
+
+</script>

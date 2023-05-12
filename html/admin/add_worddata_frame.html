@@ -6,8 +6,8 @@
     <meta name="viewport"
         content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>注册Frame</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <title>添加词汇Frame</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
         .row {
             box-sizing: border-box;
@@ -62,23 +62,21 @@
 <body>
     <!-- 输入框 -->
     <div class="row">
-        <input id="username" class="input" type="text" placeholder="用户名">
+        <input id="soundmark" class="input" type="text" placeholder="粤语音标">
     </div>
     <div class="row">
-        <input id="email" class="input" type="email" placeholder="邮箱">
+        <input id="chinese" class="input" type="text" placeholder="汉语">
     </div>
     <div class="row">
-        <input id="password" class="input" type="password" placeholder="密码">
+        <input id="sentsoud" class="input" type="text" placeholder="例句音标">
     </div>
     <div class="row">
-        <div id="send-btn" onclick="startCountdown()">发送验证码</div>
-        <div style="float: left;">
-            <input id="verify" class="input" type="text" placeholder="验证码">
-        </div>
+        <input id="sentrans" class="input" type="text" placeholder="例句翻译">
     </div>
-    <div class="btn" tapmode="highlight" onclick="fnRegister();">注册</div>
+
+    <div class="btn" tapmode="highlight" onclick="addwordinfo();">添加词汇信息</div>
 </body>
-<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript">
 
     apiready = function () {
@@ -86,27 +84,28 @@
     };
 
     var UIInput;
-    var usernameUIInputId;
-    var passwordUIInputId;
-    var emailUIInputId;
-    var verifyUIInputTd;
-    var usernameValue;
-    var passwordValue;
-    var emailValue;
-    var verifyValue;
+    var soundmarkUIInputId;
+    var sentsoudUIInputId;
+    var chineseUIInputId;
+    var sentransUIInputId;
+    var soundmarkValue;
+    var sentsoudValue;
+    var chineseValue;
+    var sentransValue;
+
 
 
     function fnInitUIInput() {
-        // 用户名输入框模块
-        var username = $api.byId('username');
-        var usernameRect = $api.offset(username);
+        // 粤语音标输入框模块
+        var soundmark = $api.byId('soundmark');
+        var soundmarkRect = $api.offset(soundmark);
         UIInput = api.require('UIInput');
         UIInput.open({
             rect: {
-                x: usernameRect.l,
-                y: usernameRect.t,
-                w: usernameRect.w,
-                h: usernameRect.h
+                x: soundmarkRect.l,
+                y: soundmarkRect.t,
+                w: soundmarkRect.w,
+                h: soundmarkRect.h
             },
             styles: {
                 bgColor: '#fff',
@@ -118,25 +117,25 @@
             },
             autoFocus: false,
             maxRows: 1,
-            placeholder: '用户名',
+            placeholder: '粤语音标',
             keyboardType: 'default',
             fixedOn: api.frameName
         }, function (ret, err) {
             if (ret) {
-                usernameUIInputId = ret.id;
+                soundmarkUIInputId = ret.id;
                 if (ret && ret.eventType == "show") {
                     setTimeout(function () {
                         UIInput.popupKeyboard({
-                            id: usernameUIInputId
+                            id: soundmarkUIInputId
                         });
                     }, 200);
                 } else if (ret.eventType == "change") {
                     UIInput.value({
-                        id: usernameUIInputId
+                        id: soundmarkUIInputId
                     }, function (ret, err) {
                         if (ret) {
                             if (ret.status) {
-                                usernameValue = ret.msg;
+                                soundmarkValue = ret.msg;
                             }
                         }
                     });
@@ -144,15 +143,15 @@
             }
         });
 
-        // 密码输入框模块
-        var password = $api.byId('password');
-        var passwordRect = $api.offset(password);
+        // 例句音标输入模块
+        var sentsoud = $api.byId('sentsoud');
+        var sentsoudRect = $api.offset(sentsoud);
         UIInput.open({
             rect: {
-                x: passwordRect.l,
-                y: passwordRect.t,
-                w: passwordRect.w,
-                h: passwordRect.h
+                x: sentsoudRect.l,
+                y: sentsoudRect.t,
+                w: sentsoudRect.w,
+                h: sentsoudRect.h
             },
             styles: {
                 bgColor: '#fff',
@@ -164,102 +163,106 @@
             },
             autoFocus: false,
             maxRows: 1,
-            placeholder: '密码',
-            keyboardType: 'default',
-            inputType: 'password',
-            fixedOn: api.frameName
-        }, function (ret, err) {
-            if (ret) {
-                passwordUIInputId = ret.id;
-                if (ret.eventType == "change") {
-                    UIInput.value({
-                        id: passwordUIInputId
-                    }, function (ret, err) {
-                        if (ret) {
-                            if (ret.status) {
-                                passwordValue = ret.msg;
-                            }
-                        }
-                    });
-                }
-            }
-        });
-
-        //邮箱输入框模块
-        var email = $api.byId('email');
-        var emailRect = $api.offset(email);
-        UIInput.open({
-            rect: {
-                x: emailRect.l,
-                y: emailRect.t,
-                w: emailRect.w,
-                h: emailRect.h
-            },
-            styles: {
-                bgColor: '#fff',
-                size: 16,
-                color: '#000',
-                placeholder: {
-                    color: '#ccc'
-                }
-            },
-            autoFocus: false,
-            maxRows: 1,
-            placeholder: '邮箱',
-            keyboardType: 'default',
-            inputType: 'email',
-            fixedOn: api.frameName
-        }, function (ret, err) {
-            if (ret) {
-                emailUIInputId = ret.id;
-                if (ret.eventType == "change") {
-                    UIInput.value({
-                        id: emailUIInputId
-                    }, function (ret, err) {
-                        if (ret) {
-                            if (ret.status) {
-                                emailValue = ret.msg;
-                            }
-                        }
-                    });
-                }
-            }
-        });
-
-        //验证码输入框模块
-        var verify = $api.byId('verify');
-        var verifyRect = $api.offset(verify);
-        UIInput.open({
-            rect: {
-                x: verifyRect.l,
-                y: verifyRect.t,
-                w: verifyRect.w,
-                h: verifyRect.h
-            },
-            styles: {
-                bgColor: '#fff',
-                size: 16,
-                color: '#000',
-                placeholder: {
-                    color: '#ccc'
-                }
-            },
-            autoFocus: false,
-            maxRows: 1,
-            placeholder: '验证码',
+            placeholder: '例句音标',
             keyboardType: 'default',
             inputType: 'text',
             fixedOn: api.frameName
         }, function (ret, err) {
             if (ret) {
-                verifyUIInputId = ret.id;
+                sentsoudUIInputId = ret.id;
                 if (ret.eventType == "change") {
                     UIInput.value({
-                        id: verifyUIInputId
+                        id: sentsoudUIInputId
                     }, function (ret, err) {
                         if (ret) {
                             if (ret.status) {
-                                verifyValue = ret.msg;
+                                sentsoudValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //汉语输入框模块
+        var chinese = $api.byId('chinese');
+        var chineseRect = $api.offset(chinese);
+        UIInput.open({
+            rect: {
+                x: chineseRect.l,
+                y: chineseRect.t,
+                w: chineseRect.w,
+                h: chineseRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '汉语',
+            keyboardType: 'default',
+            inputType: 'text',
+            fixedOn: api.frameName
+        }, function (ret, err) {
+            if (ret) {
+                chineseUIInputId = ret.id;
+                if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: chineseUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                chineseValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        // 例句翻译输入框模块
+        var sentrans = $api.byId('sentrans');
+        var sentransRect = $api.offset(sentrans);
+        UIInput.open({
+            rect: {
+                x: sentransRect.l,
+                y: sentransRect.t,
+                w: sentransRect.w,
+                h: sentransRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '例句翻译',
+            keyboardType: 'default',
+            fixedOn: api.frameName
+        }, function (ret, err) {
+            if (ret) {
+                sentransUIInputId = ret.id;
+                if (ret && ret.eventType == "show") {
+                    setTimeout(function () {
+                        UIInput.popupKeyboard({
+                            id: sentransUIInputId
+                        });
+                    }, 200);
+                } else if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: sentransUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                sentransValue = ret.msg;
                             }
                         }
                     });
@@ -267,68 +270,70 @@
             }
         });
     }
-    // 注册
-    function fnRegister() {
-        if (!usernameValue) {
+
+    // 写入信息
+    function addwordinfo() {
+        if (!soundmarkValue) {
             if (api.systemType == 'android') {
                 setTimeout(function () {
                     UIInput.popupKeyboard({
-                        id: usernameUIInputId
+                        id: soundmarkUIInputId
                     });
                 }, 200);
             } else {
                 UIInput.popupKeyboard({
-                    id: usernameUIInputId
+                    id: soundmarkUIInputId
                 });
             }
             return;
         }
-        if (!passwordValue) {
+        if (!chineseValue) {
             if (api.systemType == 'android') {
                 setTimeout(function () {
                     UIInput.popupKeyboard({
-                        id: passwordUIInputId
+                        id: chineseUIInputId
                     });
                 }, 200);
             } else {
                 UIInput.popupKeyboard({
-                    id: passwordUIInputId
+                    id: chineseUIInputId
                 });
             }
             return;
         }
-        if (!emailValue) {
+        if (!sentsoudValue) {
             if (api.systemType == 'android') {
                 setTimeout(function () {
                     UIInput.popupKeyboard({
-                        id: emailUIInputId
+                        id: sentsoudUIInputId
                     });
                 }, 200);
             } else {
                 UIInput.popupKeyboard({
-                    id: emailUIInputId
+                    id: sentsoudUIInputId
                 });
             }
             return;
         }
-        if (!verifyValue) {
+        if (!sentransValue) {
             if (api.systemType == 'android') {
                 setTimeout(function () {
                     UIInput.popupKeyboard({
-                        id: verifyUIInputId
+                        id: sentransUIInputId
                     });
                 }, 200);
             } else {
                 UIInput.popupKeyboard({
-                    id: verifyUIInputId
+                    id: sentransUIInputId
                 });
             }
             return;
         }
+        // 接口
         api.ajax({
             url: 'http://120.77.205.20:9090/email.php',
             method: 'post',
-            dataType:"json",
+            dataType: "json",
             data: {
                 values: {
                     "email": emailValue,
@@ -338,69 +343,21 @@
             if (ret) {
                 api.alert({
                     title: '提示',
-                    msg: '注册成功',
+                    msg: '添加成功',
                 }, function (ret, err) {
-                    if (ret) {      
+                    if (ret) {
                         api.closeWin();
                     }
                 });
-            }else {
+            } else {
                 api.toast({
-                    msg: '注册失败',
+                    msg: '添加失败',
                     duration: 2000,
                     location: 'middle'
                 });
             }
         });
     }
-    //发送验证码模块
-    function startCountdown() {
-        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailValue)) {
-            alert("邮箱格式错误");
-            return;
-        }
-        var count = 60; // 倒计时时间
-        var btn = document.getElementById("send-btn");
-        btn.disabled=true;
-        btn.innerText = "发送 (" + count + ")...";
-        var timer = setInterval(function () {
-            count--;
-            btn.innerText = "发送 (" + count + ")...";
-            if (count == 0) {
-                clearInterval(timer);
-                btn.disabled = false;
-                btn.innerText = "发送邮箱";
-            }
-        }, 1000);
-        api.ajax({
-            url: 'http://120.77.205.20:9090/email.php',
-            method: 'post',
-            dataType:"json",
-            data: {
-                values: {
-                    "email": emailValue,
-                }
-            }
-        }, function (ret, err) {
-            if (ret) {
-                 var urlJson = JSON.stringify(ret);
-                 urlJson=JSON.parse(urlJson);
-                api.toast({
-                    msg: urlJson.msg,
-                    duration: 2000,
-                    location: 'middle'
-                });
-            }else {             
-                api.toast({
-                    msg: '发送邮箱失败',
-                    duration: 2000,
-                    location: 'middle'
-                });
-            }
-        });
-    }
-    
 </script>
 
 </html>

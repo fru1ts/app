@@ -6,8 +6,8 @@
     <meta name="viewport"
         content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>注册Frame</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <title>添加用户信息Frame</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
         .row {
             box-sizing: border-box;
@@ -62,31 +62,81 @@
 <body>
     <!-- 输入框 -->
     <div class="row">
+        <input id="username" class="input" type="text" placeholder="用户名">
+    </div>
+    <div class="row">
         <input id="email" class="input" type="email" placeholder="邮箱">
     </div>
     <div class="row">
         <input id="password" class="input" type="password" placeholder="密码">
     </div>
 
-    <div class="btn" tapmode="highlight" onclick="fnLogin();">登录</div>
+    <div class="btn" tapmode="highlight" onclick="adduserinfo();">添加用户信息</div>
 </body>
-<script type="text/javascript" src="../script/api.js"></script>
-<script type="text/javascript" src="../script/APICloud-rest.js"></script>
-<script type="text/javascript" src="../script/SHA1.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript">
+
     apiready = function () {
         fnInitUIInput();
     };
 
     var UIInput;
+    var usernameUIInputId;
     var passwordUIInputId;
     var emailUIInputId;
+    var usernameValue;
     var passwordValue;
     var emailValue;
 
 
     function fnInitUIInput() {
+        // 用户名输入框模块
+        var username = $api.byId('username');
+        var usernameRect = $api.offset(username);
         UIInput = api.require('UIInput');
+        UIInput.open({
+            rect: {
+                x: usernameRect.l,
+                y: usernameRect.t,
+                w: usernameRect.w,
+                h: usernameRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '用户名',
+            keyboardType: 'default',
+            fixedOn: api.frameName
+        }, function (ret, err) {
+            if (ret) {
+                usernameUIInputId = ret.id;
+                if (ret && ret.eventType == "show") {
+                    setTimeout(function () {
+                        UIInput.popupKeyboard({
+                            id: usernameUIInputId
+                        });
+                    }, 200);
+                } else if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: usernameUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                usernameValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
         // 密码输入框模块
         var password = $api.byId('password');
         var passwordRect = $api.offset(password);
@@ -168,83 +218,80 @@
                 }
             }
         });
-
-
     }
-    // 登录
-function fnLogin() {
-    if (!emailValue) {
-        if (api.systemType == 'android') {
-            setTimeout(function() {
+    // 写入信息
+    function adduserinfo() {
+        if (!usernameValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: usernameUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: usernameUIInputId
+                });
+            }
+            return;
+        }
+        if (!emailValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: emailUIInputId
+                    });
+                }, 200);
+            } else {
                 UIInput.popupKeyboard({
                     id: emailUIInputId
                 });
-            }, 200);
-        } else {
-            UIInput.popupKeyboard({
-                id: emailUIInputId
-            });
+            }
+            return;
         }
-        return;
-    }
-    if (!passwordValue) {
-        if (api.systemType == 'android') {
-            setTimeout(function() {
+        if (!passwordValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: passwordUIInputId
+                    });
+                }, 200);
+            } else {
                 UIInput.popupKeyboard({
                     id: passwordUIInputId
                 });
-            }, 200);
-        } else {
-            UIInput.popupKeyboard({
-                id: passwordUIInputId
-            });
-        }
-        return;
-    }
-    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailValue)) {
-            alert("邮箱格式错误");
+            }
             return;
         }
-    api.ajax({
-        url: 'http://120.77.205.20:9090/email.php',
-        method: 'post',
-        dataType:'json',
-        data: {
-            values: {
-                "email": emailValue,
-                // "password": passwordValue
-            }
-        }
-    }, function(ret, err) {
-        if (ret) {
-            // 保存用户信息
-            $api.setStorage('userInfo', ret);
-
-            api.alert({
-                title: '提示',
-                msg: '登录成功',
-            }, function(ret, err) {
-                if (ret) {
-                    // emailValue='',
-                    // passwordValue='',
-                    openindexWin();
+        // 接口
+        api.ajax({
+            url: 'http://120.77.205.20:9090/email.php',
+            method: 'post',
+            dataType:"json",
+            data: {
+                values: {
+                    "email": emailValue,
                 }
-            });
-        } else {
-            api.toast({
-                msg: '登录失败，用户名或密码错误',
-                duration: 2000,
-                location: 'middle'
-            });
-        }
-    });
-}
-function openindexWin(){
-    api.openWin({
-        name: 'index',
-        url: '../index.html',
-    });
-}
+            }
+        }, function (ret, err) {
+            if (ret) {
+                api.alert({
+                    title: '提示',
+                    msg: '添加成功',
+                }, function (ret, err) {
+                    if (ret) {      
+                        api.closeWin();
+                    }
+                });
+            }else {
+                api.toast({
+                    msg: '添加失败',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+    }
 </script>
+
 </html>
