@@ -3,186 +3,194 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>商品详情Frame</title>
+    <title>词汇详情Frame</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <style>
-    html,
-    body {
-        height: 100%;
-        min-height: 100%;
-    }
-    
-    section {
-        height: 100%;
-    }
-    
-    .info-name {
-        box-sizing: border-box;
-        width: 100%;
-        height: 61px;
-        padding-top: 8px;
-        padding-left: 8px;
-        border-bottom: 1px solid #ddd;
-    }
-    
-    .info-name .name {
-        width: 100%;
-        height: 60px;
-        line-height: 50px;
-        font-size: 24px;
-        font-weight: bolder;
-    }
-    
-    /* .info-name .description {
-        width: 100% ;height: 20px;
-        line-height: 20px;
-        color: #888;
-        font-size: 14px;
-    } */
-    
-    .info-explain {
-        box-sizing: border-box;
-        width: 100%;
-        height: 61px;
-        padding-top: 8px;
-        border-bottom: 1px solid #ddd;
-    }
-    
-    .info-explain .name {
-        display: inline-block;
-        width: auto;
-        height: 20px;
-        margin-top: 8px;
-        margin-left: 8px;
-        border-radius: 15px;
-        box-shadow: 0 1px 1px 1px #eee;
-        color: #fff;
-        background-color: #ff7f27dc;
-    }
-    .info-explain .value{
-        display: inline-block;
-        width: auto;
-        height: 15px;
-        line-height: 15px;
-        margin-top: 3px;
-        padding: 4px;
+        html,
+        body {
+            height: 95%;
+            min-height: 100%;
+        }
 
-    }
-    
-    .info-sentence {
-        box-sizing: border-box;
-        width: 100%;
-        height: 34px;
-        border-bottom: 1px solid #ddd;
-    }
-    
-    .info-sentence .name {
-        display: inline-block;
-        width: auto;
-        height: 20px;
-        margin-top: 8px;
-        margin-left: 8px;
-        border-radius: 15px;
-        box-shadow: 0 1px 1px 1px #eee;
-        color: #fff;
-        background-color: #ff7f27dc;
-    }
-    
-    .info-sentence .value {
-        display: inline-block;
-        width: auto;
-        height: 15px;
-        line-height: 15px;
-        margin-top: 3px;
-        padding: 4px;
-      
-    }
-    
+        section {
+            height: 100%;
+        }
+
+        .info-name {
+            box-sizing: border-box;
+            width: 100%;
+            height: 61px;
+            padding-top: 8px;
+            padding-left: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .info-name .name {
+            width: 100%;
+            height: 60px;
+            line-height: 50px;
+            font-size: 28px;
+            font-weight: bolder;
+        }
+
+        .info-explain {
+            box-sizing: border-box;
+            width: 100%;
+            height: 61px;
+            padding-top: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .info-explain .name {
+            display: inline-block;
+            width: auto;
+            height: 25px;
+            margin-top: 8px;
+            margin-left: 8px;
+            border-radius: 0 15px 15px 0;
+            box-shadow: 0 1px 1px 1px #eee;
+            color: #fff;
+            background-color: #ff7f27dc;
+        }
+
+        .info-explain .value {
+            display: inline-block;
+            width: auto;
+            height: 15px;
+            line-height: 15px;
+            margin-top: 3px;
+            padding: 4px;
+            border-radius: 8px;
+            background-color: #ff7f27dc;
+
+        }
+
+        .info-sentence {
+            box-sizing: border-box;
+            width: 100%;
+            height: 68px;
+            /* border-bottom: 1px solid #ddd; */
+        }
+
+        .info-sentence .name {
+            display: inline-block;
+            width: auto;
+            height: 20px;
+            margin-top: 8px;
+            margin-left: 8px;
+            border-radius: 0 15px 15px 0px;
+            box-shadow: 0 1px 1px 1px #eee;
+            color: #fff;
+            background-color: #ff7f27dc;
+        }
+
+        .info-sentence .value {
+            display: inline-block;
+            width: auto;
+            height: 15px;
+            line-height: 20px;
+            margin-top: 3px;
+            padding: 4px;
+            border-radius: 8px;
+
+        }
     </style>
 </head>
 
 <body>
-    <section>
-        <div id="picture" class="picture"></div>
-        <div id='audio' class="audio">音频</div>
-        <div class="info-name">
-            <div id="wordName" class="name">雷猴</div>
-        </div>
-        <div class="info-explain">
-            <div class="name">词语解释：</div>
-            <div class="value">你好</div>
-        </div>
-        <div class="info-sentence">
-            <div class="name">例句：</div>
-            <div class="value">雷猴啊</div>
-        </div>
-    </section>
+    <div id="app">
+        <section v-for="item in itemList">
+            <div id="picture" class="picture"></div>
+            <audio id="audio" controls :src=item.audiopath></audio>
+            <div class="info-name">
+                <div id="wordsound" class="name">{{item.wordsound}}</div>
+            </div>
+            <div class="info-explain">
+                <div class="name">词语解释：</div>
+                <div class="value">{{item.word}}</div>
+            </div>
+            <div class="info-sentence">
+                <div class="name">例句：</div>
+                <div class="value">{{item.sensound}}</div></br>
+                <div class="name">翻译：</div>
+                <div class="value">{{item.sentence}}</div>
+            </div>
+        </section>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/vue.min.js"></script>
 <script type="text/javascript">
-apiready = function() {
-    // 初始化轮播图模块
-    initUIScrollPicture();
-
-    // 获取商品详情数据
-    // getWareInfo(api.pageParam.wareId);
-};
-
-var UIScrollPicture;
-
-function initUIScrollPicture() {
-
-    // 获取占位的div元素，并设置元素的宽高
-    var picture = $api.byId('picture');
-    picture.style.width = api.winWidth + 'px';
-    picture.style.height = api.winWidth + 'px';
-    var rect = $api.offset(picture);
-
-    // 引入UIScrollPicture模块，并指定位置和宽高
-    UIScrollPicture = api.require('UIScrollPicture');
-    UIScrollPicture.open({
-        rect: {
-            x: rect.l,
-            y: rect.t,
-            w: rect.w,
-            h: rect.h
-        },
-        data: {
-            paths: [
-                '../../image/1.jpg',
-                '../../image/terminalbg.jpg'
-            ]
-        },
-        styles: {
-            caption: {
-                height: 35,
-                color: '#E0FFFF',
-                size: 13,
-                bgColor: '#696969',
-                position: 'bottom'
+    apiready = function () {
+        // 初始化轮播图模块
+        initUIScrollPicture();
+        var data = api.pageParam.data;
+        new Vue({
+            el: "#app",
+            data: {
+                itemList: [data]
             },
-            indicator: {
-                align: 'center',
-                color: '#FFFFFF',
-                activeColor: '#ff7f27dc'
+
+        });
+    };
+
+    var UIScrollPicture;
+
+    function initUIScrollPicture() {
+        var data = api.pageParam.data
+        // 获取占位的div元素，并设置元素的宽高
+        var picture = $api.byId('picture');
+        picture.style.width = api.winWidth + 'px';
+        picture.style.height = api.winWidth - 50 + 'px';
+        var rect = $api.offset(picture);
+
+        // 引入UIScrollPicture模块，并指定位置和宽高
+        UIScrollPicture = api.require('UIScrollPicture');
+        UIScrollPicture.open({
+            rect: {
+                x: rect.l,
+                y: rect.t,
+                w: rect.w,
+                h: 300
+            },
+            data: {
+                paths: [
+                    data.picpath,
+                    data.picpath1
+
+                ]
+            },
+            styles: {
+                caption: {
+                    height: 35,
+                    color: '#E0FFFF',
+                    size: 13,
+                    bgColor: '#696969',
+                    position: 'bottom'
+                },
+                indicator: {
+                    align: 'center',
+                    color: '#FFFFFF',
+                    activeColor: '#ff7f27dc'
+                }
+            },
+            placeholderImg: data.picpath,
+            contentMode: 'scaleToFill',
+            interval: 5,
+            fixedOn: api.frameName,
+            loop: true,
+            fixed: false
+        }, function (ret, err) {
+            if (ret) {
+                //alert(JSON.stringify(ret));
+            } else {
+                alert(JSON.stringify(err));
             }
-        },
-        placeholderImg: '../../image/1.jpg',
-        contentMode: 'scaleToFill',
-        interval: 5,
-        fixedOn: api.frameName,
-        loop: true,
-        fixed: false
-    }, function(ret, err) {
-        if (ret) {
-            //alert(JSON.stringify(ret));
-        } else {
-            alert(JSON.stringify(err));
-        }
-    });
-}
+        });
+    }
 </script>
 
 </html>

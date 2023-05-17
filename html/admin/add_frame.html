@@ -87,20 +87,6 @@
             delay: 200
         });
     }
-    // 退出登录函数
-    function fnLogout() {
-        api.confirm({
-            title: '提示',
-            msg: '是否退出登录',
-            buttons: ['确定', '取消']
-        }, function (ret, err) {
-            if (ret) {
-                if (1 == ret.buttonIndex) {
-                    $api.rmStorage('userInfo');
-                    api.closeWin()
-                }
-            }
-        });
-    }
+
 
 </script>

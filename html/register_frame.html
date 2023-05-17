@@ -71,7 +71,7 @@
         <input id="password" class="input" type="password" placeholder="密码">
     </div>
     <div class="row">
-        <div id="send-btn" onclick="startCountdown()">发送验证码</div>
+        <button id="send-btn" onclick="startCountdown()">发送验证码</button>
         <div style="float: left;">
             <input id="verify" class="input" type="text" placeholder="验证码">
         </div>
@@ -326,12 +326,15 @@
             return;
         }
         api.ajax({
-            url: 'http://120.77.205.20:9090/email.php',
+            url: 'http://120.77.205.20:9090/user/regist.php',
             method: 'post',
-            dataType:"json",
+            dataType: "json",
             data: {
                 values: {
-                    "email": emailValue,
+                    "mail": emailValue,
+                    "name": usernameValue,
+                    "password": passwordValue,
+                    "captcha": verifyValue,
                 }
             }
         }, function (ret, err) {
@@ -340,13 +343,13 @@
                     title: '提示',
                     msg: '注册成功',
                 }, function (ret, err) {
-                    if (ret) {      
+                    if (ret) {
                         api.closeWin();
                     }
                 });
-            }else {
+            } else {
                 api.toast({
-                    msg: '注册失败',
+                    msg: '请求失败，请检查网络',
                     duration: 2000,
                     location: 'middle'
                 });
@@ -361,8 +364,8 @@
             return;
         }
         var count = 60; // 倒计时时间
-        var btn = document.getElementById("send-btn");
-        btn.disabled=true;
+        var btn = $api.byId("send-btn");
+        btn.disabled = true;
         btn.innerText = "发送 (" + count + ")...";
         var timer = setInterval(function () {
             count--;
@@ -370,37 +373,40 @@
             if (count == 0) {
                 clearInterval(timer);
                 btn.disabled = false;
-                btn.innerText = "发送邮箱";
+                btn.innerText = "发送验证码";
             }
         }, 1000);
         api.ajax({
-            url: 'http://120.77.205.20:9090/email.php',
+            url: 'http://120.77.205.20:9090/user/email.php',
             method: 'post',
-            dataType:"json",
+            dataType: "json",
             data: {
                 values: {
-                    "email": emailValue,
+                    "mail": emailValue,
+                    "password": passwordValue,
+                    "name": usernameValue,
+                    "captcha": verifyValue,
                 }
             }
         }, function (ret, err) {
             if (ret) {
-                 var urlJson = JSON.stringify(ret);
-                 urlJson=JSON.parse(urlJson);
+                var urlJson = JSON.stringify(ret);
+                urlJson = JSON.parse(urlJson);
                 api.toast({
                     msg: urlJson.msg,
                     duration: 2000,
                     location: 'middle'
                 });
-            }else {             
+            } else {
                 api.toast({
-                    msg: '发送邮箱失败',
+                    msg: '发送失败，请检查网络',
                     duration: 2000,
                     location: 'middle'
                 });
             }
         });
     }
-    
+
 </script>
 
 </html>

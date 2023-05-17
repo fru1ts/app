@@ -50,6 +50,7 @@ apiready = function() {
     var header = $api.byId('header');
     $api.fixStatusBar(header);
     var headerH = $api.offset(header).h;
+    var data=api.pageParam.data;
     //打开框架
     api.openFrame({
         name: 'detail_frame',
@@ -58,10 +59,14 @@ apiready = function() {
             x: 0,
             y: headerH,
             w: 'auto',
-            h: 'auto'
+            h: 'auto',
+            
         },
         bounces: false,
-        softInputBarEnabled: false //不显示键盘上方的工具条
+        softInputBarEnabled: false, //不显示键盘上方的工具条
+        pageParam:{
+            data:  data
+          }
     });
 };
 </script>

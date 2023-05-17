@@ -56,22 +56,39 @@
         .highlight {
             opacity: 0.7;
         }
+
+        .file {
+            box-sizing: border-box;
+            width: auto;
+            height: 70px;
+            margin-left: 32px;
+            margin-right: 32px;
+            padding-top: 40px;
+        }
     </style>
 </head>
 
 <body>
     <!-- 输入框 -->
     <div class="row">
-        <input id="soundmark" class="input" type="text" placeholder="粤语音标">
+        <input id="soundmark" class="input" type="text" >
     </div>
     <div class="row">
-        <input id="chinese" class="input" type="text" placeholder="汉语">
+        <input id="chinese" class="input" type="text" >
     </div>
     <div class="row">
-        <input id="sentsoud" class="input" type="text" placeholder="例句音标">
+        <input id="sentsoud" class="input" type="text" >
     </div>
     <div class="row">
-        <input id="sentrans" class="input" type="text" placeholder="例句翻译">
+        <input id="sentrans" class="input" type="text" >
+    </div>
+    <div class='file'>
+        上传图片：
+        <input id="uploadInput" type="file" name="file" />
+    </div>
+    <div class='file'>
+        上传音频：
+        <input id="uploadInput" type="file" name="file" />
     </div>
 
     <div class="btn" tapmode="highlight" onclick="addwordinfo();">添加词汇信息</div>
@@ -329,6 +346,39 @@
             }
             return;
         }
+        function handleChangeFile() {
+            var files = $api.byId('uploadInput').files;
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                //上传
+                uploadFile(file);
+            }
+            $api.byId('uploadInput').value = [];
+        }
+
+        function uploadFile(file) {
+            var xhr = new XMLHttpRequest();
+            var url = '上传文件的接口地址';
+            xhr.open('POST', url, true);
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('fname', file.name);
+            api.showProgress({ title: '正在上传' });
+            xhr.send(formData);
+            xhr.onreadystatechange = function () {
+                api.hideProgress();
+                if (xhr.readyState === 4) {
+                    var resData = JSON.parse(xhr.response);
+                    if (resData && (resData.id || resData.bizkey)) {
+                        openToast('文件上传成功');
+                        //执行刷新页面的方法 initView();
+                    } else {
+                        api.hideProgress();
+                        openToast('文件上传失败');
+                    }
+                }
+            };
+        }
         // 接口
         api.ajax({
             url: 'http://120.77.205.20:9090/email.php',
@@ -358,6 +408,9 @@
             }
         });
     }
+
+
+
 </script>
 
 </html>

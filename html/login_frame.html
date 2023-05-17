@@ -6,7 +6,7 @@
     <meta name="viewport"
         content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>注册Frame</title>
+    <title>登录Frame</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <style>
         .row {
@@ -188,13 +188,7 @@ function fnLogin() {
         return;
     }
     if (!passwordValue) {
-        if (api.systemType == 'android') {
-            setTimeout(function() {
-                UIInput.popupKeyboard({
-                    id: passwordUIInputId
-                });
-            }, 200);
-        } else {
+         {
             UIInput.popupKeyboard({
                 id: passwordUIInputId
             });
@@ -207,33 +201,40 @@ function fnLogin() {
             return;
         }
     api.ajax({
-        url: 'http://120.77.205.20:9090/email.php',
+        url: 'http://120.77.205.20:9090/user/login.php',
         method: 'post',
         dataType:'json',
         data: {
             values: {
-                "email": emailValue,
-                // "password": passwordValue
+                "mail": emailValue,
+                "password": passwordValue
             }
         }
     }, function(ret, err) {
         if (ret) {
             // 保存用户信息
-            $api.setStorage('userInfo', ret);
-
-            api.alert({
-                title: '提示',
-                msg: '登录成功',
-            }, function(ret, err) {
-                if (ret) {
-                    // emailValue='',
-                    // passwordValue='',
-                    openindexWin();
-                }
+            var userInfo=JSON.stringify(ret);
+            userInfo=JSON.parse(userInfo).name;
+            api.setPrefs({
+                key: 'userInfo',
+                value: userInfo
             });
+            var res=JSON.stringify(ret);
+            urlJson=JSON.parse(res).msg;
+            
+                 api.toast({
+                msg: urlJson,
+                duration: 2000,
+                location: 'middle'
+            });
+            if(urlJson=='登录成功'){
+                $api.byId('password').value='';
+                openindexWin();
+            }
+            
         } else {
             api.toast({
-                msg: '登录失败，用户名或密码错误',
+                msg: '请求失败，请检查网络',
                 duration: 2000,
                 location: 'middle'
             });
@@ -244,6 +245,9 @@ function openindexWin(){
     api.openWin({
         name: 'index',
         url: '../index.html',
+        pageParam:{
+            name:urlJson.username
+        }
     });
 }
 </script>
