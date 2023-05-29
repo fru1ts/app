@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>口语</title>
+    <title>查询数据</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../../css/style.css" />
 </head>
@@ -13,7 +13,7 @@
 <body>
     <header id="header">
         <div class="back" tapmode onclick="api.closeWin();"></div>
-        <h1>口语</h1>
+        <h1>查询词汇数据</h1>
     </header>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -24,8 +24,8 @@ apiready = function() {
     var headerH = $api.offset(header).h;
     //打开框架
     api.openFrame({
-        name: 'prac1_frame',
-        url: './prac1_frame.html',
+        name: 'search_word_frame',
+        url: '../frame0.html',
         rect: {
             x: 0,
             y: headerH,

@@ -5,18 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>收藏</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
-    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <title>忘记密码</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+
 </head>
 
 <body>
     <header id="header">
         <div class="back" tapmode onclick="api.closeWin();"></div>
-        <h1>收藏</h1>
+        <h1>忘记密码</h1>
     </header>
 </body>
-<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 apiready = function() {
     var header = $api.byId('header');
@@ -24,8 +25,8 @@ apiready = function() {
     var headerH = $api.offset(header).h;
     //打开框架
     api.openFrame({
-        name: 'word_frame',
-        url: './word_frame.html',
+        name: 'forgetpwd_frame',
+        url: './forgetpwd_frame.html',
         rect: {
             x: 0,
             y: headerH,

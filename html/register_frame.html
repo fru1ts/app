@@ -120,7 +120,8 @@
             maxRows: 1,
             placeholder: '用户名',
             keyboardType: 'default',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 usernameUIInputId = ret.id;
@@ -167,7 +168,8 @@
             placeholder: '密码',
             keyboardType: 'default',
             inputType: 'password',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 passwordUIInputId = ret.id;
@@ -249,7 +251,8 @@
             placeholder: '验证码',
             keyboardType: 'default',
             inputType: 'text',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 verifyUIInputId = ret.id;
@@ -325,6 +328,11 @@
             }
             return;
         }
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailValue)) {
+            alert("邮箱格式错误");
+            return;
+        }
         api.ajax({
             url: 'http://120.77.205.20:9090/user/regist.php',
             method: 'post',
@@ -339,13 +347,12 @@
             }
         }, function (ret, err) {
             if (ret) {
-                api.alert({
-                    title: '提示',
-                    msg: '注册成功',
-                }, function (ret, err) {
-                    if (ret) {
-                        api.closeWin();
-                    }
+                var urlJson = JSON.stringify(ret);
+                urlJson = JSON.parse(urlJson);
+                api.toast({
+                    msg: urlJson.msg,
+                    duration: 2000,
+                    location: 'middle'
                 });
             } else {
                 api.toast({

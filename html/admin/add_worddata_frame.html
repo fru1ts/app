@@ -42,10 +42,10 @@
             border-radius: 8px;
         }
 
-        #send-btn {
-            width: 100px;
+        .upload-btn {
+            width: 120px;
             height: 30px;
-            float: right;
+            float: left;
             background-color: #ff7f27dc;
             font-size: 18px;
             color: #fff;
@@ -71,31 +71,33 @@
 <body>
     <!-- 输入框 -->
     <div class="row">
-        <input id="soundmark" class="input" type="text" >
+        <input id="wordsound" name="wordsound" class="input" type="text">
     </div>
     <div class="row">
-        <input id="chinese" class="input" type="text" >
+        <input id="word" name="word" class="input" type="text">
     </div>
     <div class="row">
-        <input id="sentsoud" class="input" type="text" >
+        <input id="sentsound" name="sentsound" class="input" type="text">
     </div>
     <div class="row">
-        <input id="sentrans" class="input" type="text" >
+        <input id="sentence" name="sentence" class="input" type="text">
     </div>
     <div class='file'>
-        上传图片：
-        <input id="uploadInput" type="file" name="file" />
+        <button type="button" onclick="getPicture1()" name="button" class="upload-btn">上传图片1</button><span id='pic1_name'></span>
     </div>
     <div class='file'>
-        上传音频：
-        <input id="uploadInput" type="file" name="file" />
+        <button type="button" onclick="getPicture2()" name="button" class="upload-btn">上传图片2</button><span id='pic2_name'></span>
     </div>
-
+    <div class='file'>
+        <button type="button" onclick="getaudio()" name="button" class="upload-btn">上传音频</button><span id='audio_name'></span>
+    </div>
     <div class="btn" tapmode="highlight" onclick="addwordinfo();">添加词汇信息</div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript">
-
+    var picURL1 = "";
+    var picURL2 = "";
+    var audioURL = "";
     apiready = function () {
         fnInitUIInput();
     };
@@ -114,7 +116,7 @@
 
     function fnInitUIInput() {
         // 粤语音标输入框模块
-        var soundmark = $api.byId('soundmark');
+        var soundmark = $api.byId('wordsound');
         var soundmarkRect = $api.offset(soundmark);
         UIInput = api.require('UIInput');
         UIInput.open({
@@ -136,7 +138,8 @@
             maxRows: 1,
             placeholder: '粤语音标',
             keyboardType: 'default',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 soundmarkUIInputId = ret.id;
@@ -161,7 +164,7 @@
         });
 
         // 例句音标输入模块
-        var sentsoud = $api.byId('sentsoud');
+        var sentsoud = $api.byId('sentsound');
         var sentsoudRect = $api.offset(sentsoud);
         UIInput.open({
             rect: {
@@ -183,7 +186,8 @@
             placeholder: '例句音标',
             keyboardType: 'default',
             inputType: 'text',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 sentsoudUIInputId = ret.id;
@@ -202,7 +206,7 @@
         });
 
         //汉语输入框模块
-        var chinese = $api.byId('chinese');
+        var chinese = $api.byId('word');
         var chineseRect = $api.offset(chinese);
         UIInput.open({
             rect: {
@@ -224,7 +228,8 @@
             placeholder: '汉语',
             keyboardType: 'default',
             inputType: 'text',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 chineseUIInputId = ret.id;
@@ -242,7 +247,7 @@
             }
         });
         // 例句翻译输入框模块
-        var sentrans = $api.byId('sentrans');
+        var sentrans = $api.byId('sentence');
         var sentransRect = $api.offset(sentrans);
         UIInput.open({
             rect: {
@@ -263,7 +268,8 @@
             maxRows: 1,
             placeholder: '例句翻译',
             keyboardType: 'default',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 sentransUIInputId = ret.id;
@@ -346,68 +352,91 @@
             }
             return;
         }
-        function handleChangeFile() {
-            var files = $api.byId('uploadInput').files;
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                //上传
-                uploadFile(file);
-            }
-            $api.byId('uploadInput').value = [];
-        }
-
-        function uploadFile(file) {
-            var xhr = new XMLHttpRequest();
-            var url = '上传文件的接口地址';
-            xhr.open('POST', url, true);
-            var formData = new FormData();
-            formData.append('file', file);
-            formData.append('fname', file.name);
-            api.showProgress({ title: '正在上传' });
-            xhr.send(formData);
-            xhr.onreadystatechange = function () {
-                api.hideProgress();
-                if (xhr.readyState === 4) {
-                    var resData = JSON.parse(xhr.response);
-                    if (resData && (resData.id || resData.bizkey)) {
-                        openToast('文件上传成功');
-                        //执行刷新页面的方法 initView();
-                    } else {
-                        api.hideProgress();
-                        openToast('文件上传失败');
-                    }
-                }
-            };
-        }
-        // 接口
         api.ajax({
-            url: 'http://120.77.205.20:9090/email.php',
+            url: 'http://120.77.205.20:9090/admin/addword.php',
             method: 'post',
             dataType: "json",
             data: {
                 values: {
-                    "email": emailValue,
+                    'wordsound': soundmarkValue,
+                    'sensound': sentsoudValue,
+                    'word': chineseValue,
+                    'sentence': sentransValue,
+                },
+                files: {
+                    'pic1': picURL1,
+                    'pic2':picURL2,
+                    'audio': audioURL,
                 }
-            }
+            },
         }, function (ret, err) {
             if (ret) {
-                api.alert({
-                    title: '提示',
-                    msg: '添加成功',
-                }, function (ret, err) {
-                    if (ret) {
-                        api.closeWin();
-                    }
+                var urlJson = JSON.stringify(ret);
+                urlJson = JSON.parse(urlJson);
+                api.toast({
+                    msg: urlJson.msg,
+                    duration: 2000,
+                    location: 'middle'
                 });
             } else {
+                alert(err.msg);
                 api.toast({
-                    msg: '添加失败',
+                    msg: '添加失败,请检查网络',
                     duration: 2000,
                     location: 'middle'
                 });
             }
         });
     }
+    function getPicture1() {
+        api.getPicture({
+            sourceType: ['library', 'camera', 'album'],
+            encodingType: 'jpg',
+            mediaValue: 'pic',
+            destinationType: 'url',
+            allowEdit: false,
+            quality: 100,
+            saveToPhotoAlbum: false
+        }, function (ret, err) {
+            if (ret) {
+                picURL1 = ret.data;
+                $api.byId('pic1_name').textContent=picURL1.split('/').pop();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+    }
+    function getPicture2() {
+        api.getPicture({
+            sourceType: ['library', 'camera', 'album'],
+            encodingType: 'jpg',
+            mediaValue: 'pic',
+            destinationType: 'url',
+            allowEdit: false,
+            quality: 100,
+            saveToPhotoAlbum: false
+        }, function (ret, err) {
+            if (ret) {
+                picURL2 = ret.data;
+                $api.byId('pic2_name').textContent=picURL2.split('/').pop();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+    }
+    function getaudio() {
+        var fileBrowser = api.require('fileBrowser');
+        fileBrowser.open(function (ret) {
+            if (ret) {
+                audioURL = ret.url;
+                $api.byId('audio_name').textContent=audioURL.split('/').pop();
+            }
+        });
+    }
+
+
 
 
 

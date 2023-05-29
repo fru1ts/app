@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>收藏</title>
+    <title>查询数据</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../../css/style.css" />
 </head>
@@ -13,7 +13,7 @@
 <body>
     <header id="header">
         <div class="back" tapmode onclick="api.closeWin();"></div>
-        <h1>收藏</h1>
+        <h1>查询用户数据</h1>
     </header>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -24,8 +24,8 @@ apiready = function() {
     var headerH = $api.offset(header).h;
     //打开框架
     api.openFrame({
-        name: 'word_frame',
-        url: './word_frame.html',
+        name: 'search_userinfo_frame',
+        url: 'search_userinfo_frame.html',
         rect: {
             x: 0,
             y: headerH,

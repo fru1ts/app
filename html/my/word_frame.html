@@ -17,54 +17,8 @@
             background: #f0f0f0;
         }
 
-        .h80 {
-            height: 80px;
-        }
-
-        .h40 {
-            height: 40px;
-        }
-
-        .h20 {
-            height: 20px;
-        }
-
-        .h10 {
-            height: 10px;
-            background: #f0f0f0;
-        }
-
-        .h1 {
-            height: 1px;
-            margin-left: 15px;
-            background: #f0f0f0;
-        }
-
-        .fr {
-            float: right;
-        }
-
-        .fl {
-            float: left;
-        }
-
         .hightitem {
             background-color: #fff;
-        }
-
-        .guesstitle {
-            height: 40px;
-            line-height: 40px;
-            padding-left: 10px;
-            vertical-align: top;
-            font-size: 12px;
-            color: #999;
-        }
-
-        .guesstitle img {
-            height: 15px;
-            padding-top: 12px;
-            padding-left: 10px;
         }
 
         .home-tuan-list .item {
@@ -260,7 +214,7 @@
 
         .home-tuan-list .classify {
             color: #666;
-            font-size: 14px;
+            font-size: 20px;
         }
 
         .home-tuan-list .price,
@@ -287,58 +241,134 @@
 
 <body>
     <!-- 1 列表 -->
-    <div class="home-tuan-list">
-        <a href="" class="item Fix hightitem" tapmode="presshover" onclick="openDetail()">
+    <div class="home-tuan-list" id="app">
+        <a v-for="item in itemList" class="item Fix hightitem" tapmode="presshover" @click="openDetail(item)">
             <div class="cnt">
-                <img class="pic" src="../image/shopcover/yjbf.jpg">
+                <img class="pic" :src="item.picpath">
                 <div class="wrap">
                     <div class="wrap2">
                         <div class="content">
-                            <div class="shopname">雷猴</div><span class="tuanimg"><img
-                                    src="../image/detail_grouponicon.png" alt=""></span>
+                            <div class="shopname" id="wordsound">{{item.wordsound}}</div><span class="tuanimg"><img
+                                    :src="item.picpath1" alt=""></span>
                             <div class="comment">
                                 <span class="star star-50"></span>
                                 <span></span>
                             </div>
-                            <span class="classify">
-                                你好
-                            </span><span class="distance"><img src="../../image/ic_address_big.png" alt="">650m</span>
+                            <span class="classify" id="word">
+                                {{item.word}}
+                            </span><span class="distance"><img src="../image/ic_address_big.png" alt="">查看详情</span>
                         </div>
                     </div>
                 </div>
             </div>
         </a>
-        <a href="" class="item Fix hightitem" tapmode="presshover" onclick="openDetail()">
-            <div class="cnt">
-                <img class="pic" src="../image/shopcover/syf.jpg">
-                <div class="wrap">
-                    <div class="wrap2">
-                        <div class="content">
-                            <div class="shopname">咩</div><span class="tuanimg"><img
-                                    src="../../image/detail_cardicon.png" alt=""></span>
-                            <div class="comment">
-                                <span class="star star-45"></span>
-                                <span></span>
-                            </div>
-                            <span class="classify">
-                                什么
-                            </span><span class="distance"><img src="../../image/ic_address_big.png" alt="">670m</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
+    </div>
 </body>
 
 </html>
-<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/vue.min.js"></script>
 <script type="text/javascript">
-    function openDetail() {
+    function openDetail(item) {
         api.openWin({
             name: 'detail',
-            url:'../learn/detail.html',
+            url: './detail.html',
             bounces: false,
-            delay: 200
+            delay: 200,
+            pageParam: {
+                data: item
+            }
         });
     }
+    var app = new Vue({
+  el: "#app",
+  data: {
+    itemList: [] // 初始化为空数组
+  }
+});
+    apiready = function () {
+        var data = api.pageParam.data;
+        var userinfo = api.getPrefs({
+            sync: true,
+            key: 'userInfo'
+        });
+        var email = JSON.parse(userinfo);
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#C0C0C0',
+            isScale: true,
+            textDown: '下拉刷新...',
+            textUp: '松开刷新...',
+            textLoading: '正在刷新...'
+        }, function (ret, err) {
+            reloadList();
+            setTimeout(function () {
+                api.toast({
+                    msg: '刷新成功',
+                    duration: 2000,
+                    location: 'middle'
+                });
+                api.refreshHeaderLoadDone()
+            }, 1000);
+        });
+        api.ajax({
+            url: 'http://120.77.205.20:9090/user/fav.php',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                values: {
+                    "mail": email.email,
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                var userInfo = JSON.stringify(ret);
+                userInfo = JSON.parse(userInfo);
+                app.itemList = userInfo; // 将新数据赋值给 Vue 实例的 itemList 属性
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+
+    }
+    function reloadList() {
+        var userinfo = api.getPrefs({
+            sync: true,
+            key: 'userInfo'
+        });
+        var email = JSON.parse(userinfo);
+        pageNum = 1;
+        api.showProgress({
+            title: '努力加载中...',
+            text: '请稍后...',
+            modal: false
+        });
+        api.ajax({
+            url: 'http://120.77.205.20:9090/user/fav.php',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                values: {
+                    "mail": email.email,
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                var userInfo = JSON.stringify(ret);
+                userInfo = JSON.parse(userInfo);
+                app.itemList = userInfo; // 将新数据赋值给 Vue 实例的 itemList 属性
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+        setTimeout('api.hideProgress()', '500');
+    }
+
 </script>

@@ -6,8 +6,8 @@
     <meta name="viewport"
         content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>添加用户信息Frame</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <title>忘记密码Frame</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <style>
         .row {
             box-sizing: border-box;
@@ -62,18 +62,23 @@
 <body>
     <!-- 输入框 -->
     <div class="row">
-        <input id="username" class="input" type="text" placeholder="用户名">
-    </div>
-    <div class="row">
         <input id="email" class="input" type="email" placeholder="邮箱">
     </div>
     <div class="row">
         <input id="password" class="input" type="password" placeholder="密码">
     </div>
-
-    <div class="btn" tapmode="highlight" onclick="adduserinfo();">添加用户信息</div>
+    <div class="row">
+        <input id="password_1" class="input" type="password" placeholder="确认密码">
+    </div>
+    <div class="row">
+        <button id="send-btn" onclick="startCountdown()">发送验证码</button>
+        <div style="float: left;">
+            <input id="verify" class="input" type="text" placeholder="验证码">
+        </div>
+    </div>
+    <div class="btn" tapmode="highlight" onclick="fnRegister();">确定</div>
 </body>
-<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
 
     apiready = function () {
@@ -81,63 +86,18 @@
     };
 
     var UIInput;
-    var usernameUIInputId;
+    var password_1UIInputId;
     var passwordUIInputId;
     var emailUIInputId;
-    var usernameValue;
+    var verifyUIInputTd;
+    var password_1Value;
     var passwordValue;
     var emailValue;
+    var verifyValue;
 
 
     function fnInitUIInput() {
-        // 用户名输入框模块
-        var username = $api.byId('username');
-        var usernameRect = $api.offset(username);
         UIInput = api.require('UIInput');
-        UIInput.open({
-            rect: {
-                x: usernameRect.l,
-                y: usernameRect.t,
-                w: usernameRect.w,
-                h: usernameRect.h
-            },
-            styles: {
-                bgColor: '#fff',
-                size: 16,
-                color: '#000',
-                placeholder: {
-                    color: '#ccc'
-                }
-            },
-            autoFocus: false,
-            maxRows: 1,
-            placeholder: '用户名',
-            keyboardType: 'default',
-            fixedOn: api.frameName,
-            fixed:false,
-        }, function (ret, err) {
-            if (ret) {
-                usernameUIInputId = ret.id;
-                if (ret && ret.eventType == "show") {
-                    setTimeout(function () {
-                        UIInput.popupKeyboard({
-                            id: usernameUIInputId
-                        });
-                    }, 200);
-                } else if (ret.eventType == "change") {
-                    UIInput.value({
-                        id: usernameUIInputId
-                    }, function (ret, err) {
-                        if (ret) {
-                            if (ret.status) {
-                                usernameValue = ret.msg;
-                            }
-                        }
-                    });
-                }
-            }
-        });
-
         // 密码输入框模块
         var password = $api.byId('password');
         var passwordRect = $api.offset(password);
@@ -179,7 +139,47 @@
                 }
             }
         });
-
+        //确认密码模块
+        var password_1 = $api.byId('password_1');
+        var password_1Rect = $api.offset(password_1);
+        UIInput.open({
+            rect: {
+                x: password_1Rect.l,
+                y: password_1Rect.t,
+                w: password_1Rect.w,
+                h: password_1Rect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '确认密码',
+            keyboardType: 'default',
+            inputType: 'password',
+            fixedOn: api.frameName,
+            fixed:false,
+        }, function (ret, err) {
+            if (ret) {
+                password_1UIInputId = ret.id;
+                if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: password_1UIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                password_1Value = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
         //邮箱输入框模块
         var email = $api.byId('email');
         var emailRect = $api.offset(email);
@@ -221,19 +221,75 @@
                 }
             }
         });
+
+        //验证码输入框模块
+        var verify = $api.byId('verify');
+        var verifyRect = $api.offset(verify);
+        UIInput.open({
+            rect: {
+                x: verifyRect.l,
+                y: verifyRect.t,
+                w: verifyRect.w,
+                h: verifyRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '验证码',
+            keyboardType: 'default',
+            inputType: 'text',
+            fixedOn: api.frameName,
+            fixed:false,
+        }, function (ret, err) {
+            if (ret) {
+                verifyUIInputId = ret.id;
+                if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: verifyUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                verifyValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
-    // 写入信息
-    function adduserinfo() {
-        if (!usernameValue) {
+    // 注册
+    function fnRegister() {
+        if (!passwordValue) {
             if (api.systemType == 'android') {
                 setTimeout(function () {
                     UIInput.popupKeyboard({
-                        id: usernameUIInputId
+                        id: passwordUIInputId
                     });
                 }, 200);
             } else {
                 UIInput.popupKeyboard({
-                    id: usernameUIInputId
+                    id: passwordUIInputId
+                });
+            }
+            return;
+        }
+        if (!password_1Value) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: password_1UIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: password_1UIInputId
                 });
             }
             return;
@@ -252,35 +308,81 @@
             }
             return;
         }
-        if (!passwordValue) {
+        if (!verifyValue) {
             if (api.systemType == 'android') {
                 setTimeout(function () {
                     UIInput.popupKeyboard({
-                        id: passwordUIInputId
+                        id: verifyUIInputId
                     });
                 }, 200);
             } else {
                 UIInput.popupKeyboard({
-                    id: passwordUIInputId
+                    id: verifyUIInputId
                 });
             }
             return;
         }
+        if(passwordValue!=password_1Value){
+            alert('两次密码不一致');
+            return;
+        }
+        api.ajax({
+            url: 'http://120.77.205.20:9090/user/find2.php',
+            method: 'post',
+            dataType: "json",
+            data: {
+                values: {
+                    "mail": emailValue,
+                    "password": passwordValue,
+                    "captcha": verifyValue,
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                api.alert({
+                    title: '提示',
+                    msg: '操作成功',
+                }, function (ret, err) {
+                    if (ret) {
+                        api.closeWin();
+                    }
+                });
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+    }
+    //发送验证码模块
+    function startCountdown() {
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(emailValue)) {
             alert("邮箱格式错误");
             return;
         }
-        // 接口
+        var count = 60; // 倒计时时间
+        var btn = $api.byId("send-btn");
+        btn.disabled = true;
+        btn.innerText = "发送 (" + count + ")...";
+        var timer = setInterval(function () {
+            count--;
+            btn.innerText = "发送 (" + count + ")...";
+            if (count == 0) {
+                clearInterval(timer);
+                btn.disabled = false;
+                btn.innerText = "发送验证码";
+            }
+        }, 1000);
         api.ajax({
-            url: 'http://120.77.205.20:9090/admin/adduser.php',
+            url: 'http://120.77.205.20:9090/user/find1.php',
             method: 'post',
-            dataType:"json",
+            dataType: "json",
             data: {
                 values: {
-                    'username':usernameValue,
                     "mail": emailValue,
-                    'password':passwordValue,
                 }
             }
         }, function (ret, err) {
@@ -292,15 +394,16 @@
                     duration: 2000,
                     location: 'middle'
                 });
-            }else {
+            } else {
                 api.toast({
-                    msg: '添加失败，请检查网络',
+                    msg: '发送失败，请检查网络',
                     duration: 2000,
                     location: 'middle'
                 });
             }
         });
     }
+
 </script>
 
 </html>

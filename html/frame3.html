@@ -230,13 +230,12 @@
 	}
 	apiready = function () {
 		getCacheSize();
-
-
 		var username = api.getPrefs({
 			sync: true,
 			key: 'userInfo'
 		});
-		document.getElementById('username').textContent = "用户名：" + username;
+		username=JSON.parse(username);
+		document.getElementById('username').textContent = "用户名：" + username.username;
 	}
 
 	function getCacheSize() {

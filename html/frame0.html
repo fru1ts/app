@@ -16,9 +16,11 @@
             min-height: 100%;
             background: #f0f0f0;
         }
+
         .hightitem {
             background-color: #fff;
         }
+
         .home-tuan-list .item {
             position: relative;
             display: block;
@@ -234,14 +236,53 @@
         .presshover {
             background-color: #FAFAFA !important;
         }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            background-color: #f5f5f5;
+            border-radius: 20px;
+            padding: 5px;
+            margin-left: 4%;
+
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 8px;
+            font-size: 16px;
+            background-color: transparent;
+        }
+
+        .search-button {
+            border: none;
+            outline: none;
+            background-color: #ff7f27dc;
+            color: #fff;
+            padding: 8px 16px;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* 鼠标悬停样式 */
+        .search-button:hover {
+            background-color: #ff7f27dc;
+        }
     </style>
 </head>
 
 <body>
+    <div class="search-container">
+        <input type="text" class="search-input" id='search-input' placeholder="搜索">
+        <button class="search-button" onclick="search();">搜索</button>
+    </div>
     <!-- 1 列表 -->
     <div class="home-tuan-list" id="app">
-        <a v-for="item in itemList" class="item Fix hightitem" tapmode="presshover"
-            @click="openDetail(item)">
+        <a v-for="item in itemList" class="item Fix hightitem" tapmode="presshover" @click="openDetail(item)">
             <div class="cnt">
                 <img class="pic" :src="item.picpath">
                 <div class="wrap">
@@ -276,11 +317,17 @@
             url: 'learn/detail.html',
             bounces: false,
             delay: 200,
-            pageParam:{
-                data:item 
+            pageParam: {
+                data: item
             }
         });
     }
+    var app = new Vue({
+        el: "#app",
+        data: {
+            itemList: [] // 初始化为空数组
+        }
+    });
     apiready = function () {
         api.setCustomRefreshHeaderInfo({
             bgColor: '#C0C0C0',
@@ -305,15 +352,9 @@
             dataType: 'json',
         }, function (ret, err) {
             if (ret) {
-                var userInfo=JSON.stringify(ret);
-                 userInfo=JSON.parse(userInfo);
-             new Vue({
-            el: "#app",
-            data: {
-                itemList: userInfo
-            },
-
-        });
+                var userInfo = JSON.stringify(ret);
+                userInfo = JSON.parse(userInfo);
+                app.itemList = userInfo; // 将新数据赋值给 Vue 实例的 itemList 属性
             } else {
                 api.toast({
                     msg: '请求失败，请检查网络',
@@ -322,7 +363,7 @@
                 });
             }
         });
-        
+
 
     };
     function reloadList() {
@@ -332,14 +373,16 @@
             text: '请稍后...',
             modal: false
         });
+        $api.byId('search-input').value='';
         api.ajax({
             url: 'http://120.77.205.20:9090/read.php',
             method: 'get',
             dataType: 'json',
         }, function (ret, err) {
             if (ret) {
-                var userInfo=JSON.stringify(ret);
-                 userInfo=JSON.parse(userInfo);
+                var userInfo = JSON.stringify(ret);
+                userInfo = JSON.parse(userInfo);
+                app.itemList = userInfo; // 将新数据赋值给 Vue 实例的 itemList 属性
             } else {
                 api.toast({
                     msg: '请求失败，请检查网络',
@@ -349,5 +392,38 @@
             }
         });
         setTimeout('api.hideProgress()', '500');
+    }
+    function search(){
+        api.ajax({
+            url: 'http://120.77.205.20:9090/user/search.php',
+            method: 'post',
+            dataType: 'json',
+            data:{
+                values:{
+                    'word':$api.byId('search-input').value,
+                }
+            },
+        }, function (ret, err) {
+            if (ret) {
+                var userInfo = JSON.stringify(ret);
+                userInfo = JSON.parse(userInfo);
+                if(userInfo.msg=='含有敏感词语'){
+                    api.toast({
+                    msg: userInfo.msg,
+                    duration: 2000,
+                    location: 'middle'
+                });
+                }else{
+                app.itemList = userInfo.msg; // 将新数据赋值给 Vue 实例的 itemList 属性
+                }
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+
     }
 </script>

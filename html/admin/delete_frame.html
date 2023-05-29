@@ -53,11 +53,11 @@
     <div class="row">
          <input id="email" class="input" type="email" placeholder="邮箱">
     </div>
-    <div class="btn" tapmode="highlight" >删除用户数据</div>
+    <div class="btn" tapmode="highlight" onclick="deluser();" >删除用户数据</div>
     <div class="row">
         <input id="chinese" class="input" type="text" >
     </div>
-    <div class="btn" tapmode="highlight" >删除词汇数据</div>
+    <div class="btn" tapmode="highlight" onclick="delword();" >删除词汇数据</div>
 
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -102,7 +102,8 @@
             placeholder: '邮箱',
             keyboardType: 'default',
             inputType: 'email',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 emailUIInputId = ret.id;
@@ -142,7 +143,8 @@
             placeholder: '汉语',
             keyboardType: 'default',
             inputType: 'text',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 chineseUIInputId = ret.id;
@@ -157,6 +159,92 @@
                         }
                     });
                 }
+            }
+        });
+    }
+    function deluser(){
+        if (!emailValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: emailUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: emailUIInputId
+                });
+            }
+            return;
+        }
+        // 接口
+        api.ajax({
+            url: 'http://120.77.205.20:9090/admin/deluser.php',
+            method: 'post',
+            dataType:"json",
+            data: {
+                values: {
+                    "mail": emailValue,
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                 var urlJson = JSON.stringify(ret);
+                urlJson = JSON.parse(urlJson);
+                api.toast({
+                    msg: urlJson.msg,
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }else {
+                api.toast({
+                    msg: '添加失败,请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+    }
+    function delword(){
+        if (!chineseValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: chineseUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: chineseUIInputId
+                });
+            }
+            return;
+        }
+        // 接口
+        api.ajax({
+            url: 'http://120.77.205.20:9090/admin/delword.php',
+            method: 'post',
+            dataType:"json",
+            data: {
+                values: {
+                    "word": chineseValue,
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                 var urlJson = JSON.stringify(ret);
+                urlJson = JSON.parse(urlJson);
+                api.toast({
+                    msg: urlJson.msg,
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }else {
+                api.toast({
+                    msg: '添加失败,请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
             }
         });
     }

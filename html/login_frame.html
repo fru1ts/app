@@ -56,6 +56,12 @@
         .highlight {
             opacity: 0.7;
         }
+        .forget{
+            box-sizing: border-box;
+            width: auto;
+            float:right;
+            margin-right: 32px;
+        }
     </style>
 </head>
 
@@ -67,6 +73,7 @@
     <div class="row">
         <input id="password" class="input" type="password" placeholder="密码">
     </div>
+    <div class='forget' onclick="forgetpwd()">忘记密码</div>
 
     <div class="btn" tapmode="highlight" onclick="fnLogin();">登录</div>
 </body>
@@ -110,7 +117,8 @@
             placeholder: '密码',
             keyboardType: 'default',
             inputType: 'password',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 passwordUIInputId = ret.id;
@@ -151,7 +159,8 @@
             placeholder: '邮箱',
             keyboardType: 'default',
             inputType: 'email',
-            fixedOn: api.frameName
+            fixedOn: api.frameName,
+            fixed:false,
         }, function (ret, err) {
             if (ret) {
                 emailUIInputId = ret.id;
@@ -213,8 +222,12 @@ function fnLogin() {
     }, function(ret, err) {
         if (ret) {
             // 保存用户信息
-            var userInfo=JSON.stringify(ret);
-            userInfo=JSON.parse(userInfo).name;
+            var name=JSON.stringify(ret);
+            name=JSON.parse(name).name;
+            var userInfo={
+                'username':name,
+                'email':emailValue
+            };
             api.setPrefs({
                 key: 'userInfo',
                 value: userInfo
@@ -229,7 +242,13 @@ function fnLogin() {
             });
             if(urlJson=='登录成功'){
                 $api.byId('password').value='';
-                openindexWin();
+                if(name=='admin'){
+                    var path='admin.html';
+                }else{
+                    var path='../index.html';
+                }
+                
+                openindexWin(path);
             }
             
         } else {
@@ -241,13 +260,19 @@ function fnLogin() {
         }
     });
 }
-function openindexWin(){
+function openindexWin(path){
     api.openWin({
         name: 'index',
-        url: '../index.html',
+        url: path,
         pageParam:{
             name:urlJson.username
         }
+    });
+}
+function forgetpwd(){
+    api.openWin({
+        name: 'forgetpwd',
+        url: 'forgetpwd.html',
     });
 }
 </script>
