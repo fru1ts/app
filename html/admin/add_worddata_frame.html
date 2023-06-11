@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>添加词汇Frame</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <style>
+        .row {
+            box-sizing: border-box;
+            width: auto;
+            height: 70px;
+            margin-left: 32px;
+            margin-right: 32px;
+            padding-top: 40px;
+            border-bottom: 1px solid #888;
+        }
+
+        .input {
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .btn {
+            width: auto;
+            height: 50px;
+            margin-left: 32px;
+            margin-right: 32px;
+            margin-top: 32px;
+            background-color: #ff7f27dc;
+            color: #fff;
+            font-size: 24px;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .upload-btn {
+            width: 120px;
+            height: 30px;
+            float: left;
+            background-color: #ff7f27dc;
+            font-size: 18px;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .highlight {
+            opacity: 0.7;
+        }
+
+        .file {
+            box-sizing: border-box;
+            width: auto;
+            height: 70px;
+            margin-left: 32px;
+            margin-right: 32px;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 输入框 -->
+    <div class="row">
+        <input id="wordsound" name="wordsound" class="input" type="text">
+    </div>
+    <div class="row">
+        <input id="word" name="word" class="input" type="text">
+    </div>
+    <div class="row">
+        <input id="sentsound" name="sentsound" class="input" type="text">
+    </div>
+    <div class="row">
+        <input id="sentence" name="sentence" class="input" type="text">
+    </div>
+    <div class='file'>
+        <button type="button" onclick="getPicture1()" name="button" class="upload-btn">上传图片1</button><span id='pic1_name'></span>
+    </div>
+    <div class='file'>
+        <button type="button" onclick="getPicture2()" name="button" class="upload-btn">上传图片2</button><span id='pic2_name'></span>
+    </div>
+    <div class='file'>
+        <button type="button" onclick="getaudio()" name="button" class="upload-btn">上传音频</button><span id='audio_name'></span>
+    </div>
+    <div class="btn" tapmode="highlight" onclick="addwordinfo();">添加词汇信息</div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript">
+    var picURL1 = "";
+    var picURL2 = "";
+    var audioURL = "";
+    apiready = function () {
+        fnInitUIInput();
+    };
+
+    var UIInput;
+    var soundmarkUIInputId;
+    var sentsoudUIInputId;
+    var chineseUIInputId;
+    var sentransUIInputId;
+    var soundmarkValue;
+    var sentsoudValue;
+    var chineseValue;
+    var sentransValue;
+
+
+
+    function fnInitUIInput() {
+        // 粤语音标输入框模块
+        var soundmark = $api.byId('wordsound');
+        var soundmarkRect = $api.offset(soundmark);
+        UIInput = api.require('UIInput');
+        UIInput.open({
+            rect: {
+                x: soundmarkRect.l,
+                y: soundmarkRect.t,
+                w: soundmarkRect.w,
+                h: soundmarkRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '粤语音标',
+            keyboardType: 'default',
+            fixedOn: api.frameName,
+            fixed:false,
+        }, function (ret, err) {
+            if (ret) {
+                soundmarkUIInputId = ret.id;
+                if (ret && ret.eventType == "show") {
+                    setTimeout(function () {
+                        UIInput.popupKeyboard({
+                            id: soundmarkUIInputId
+                        });
+                    }, 200);
+                } else if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: soundmarkUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                soundmarkValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        // 例句音标输入模块
+        var sentsoud = $api.byId('sentsound');
+        var sentsoudRect = $api.offset(sentsoud);
+        UIInput.open({
+            rect: {
+                x: sentsoudRect.l,
+                y: sentsoudRect.t,
+                w: sentsoudRect.w,
+                h: sentsoudRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '例句音标',
+            keyboardType: 'default',
+            inputType: 'text',
+            fixedOn: api.frameName,
+            fixed:false,
+        }, function (ret, err) {
+            if (ret) {
+                sentsoudUIInputId = ret.id;
+                if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: sentsoudUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                sentsoudValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //汉语输入框模块
+        var chinese = $api.byId('word');
+        var chineseRect = $api.offset(chinese);
+        UIInput.open({
+            rect: {
+                x: chineseRect.l,
+                y: chineseRect.t,
+                w: chineseRect.w,
+                h: chineseRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '汉语',
+            keyboardType: 'default',
+            inputType: 'text',
+            fixedOn: api.frameName,
+            fixed:false,
+        }, function (ret, err) {
+            if (ret) {
+                chineseUIInputId = ret.id;
+                if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: chineseUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                chineseValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        // 例句翻译输入框模块
+        var sentrans = $api.byId('sentence');
+        var sentransRect = $api.offset(sentrans);
+        UIInput.open({
+            rect: {
+                x: sentransRect.l,
+                y: sentransRect.t,
+                w: sentransRect.w,
+                h: sentransRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '例句翻译',
+            keyboardType: 'default',
+            fixedOn: api.frameName,
+            fixed:false,
+        }, function (ret, err) {
+            if (ret) {
+                sentransUIInputId = ret.id;
+                if (ret && ret.eventType == "show") {
+                    setTimeout(function () {
+                        UIInput.popupKeyboard({
+                            id: sentransUIInputId
+                        });
+                    }, 200);
+                } else if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: sentransUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                sentransValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    // 写入信息
+    function addwordinfo() {
+        if (!soundmarkValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: soundmarkUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: soundmarkUIInputId
+                });
+            }
+            return;
+        }
+        if (!chineseValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: chineseUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: chineseUIInputId
+                });
+            }
+            return;
+        }
+        if (!sentsoudValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: sentsoudUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: sentsoudUIInputId
+                });
+            }
+            return;
+        }
+        if (!sentransValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: sentransUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: sentransUIInputId
+                });
+            }
+            return;
+        }
+        api.ajax({
+            url: 'http://120.77.205.20:9090/admin/addword.php',
+            method: 'post',
+            dataType: "json",
+            data: {
+                values: {
+                    'wordsound': soundmarkValue,
+                    'sensound': sentsoudValue,
+                    'word': chineseValue,
+                    'sentence': sentransValue,
+                },
+                files: {
+                    'pic1': picURL1,
+                    'pic2':picURL2,
+                    'audio': audioURL,
+                }
+            },
+        }, function (ret, err) {
+            if (ret) {
+                var urlJson = JSON.stringify(ret);
+                urlJson = JSON.parse(urlJson);
+                api.toast({
+                    msg: urlJson.msg,
+                    duration: 2000,
+                    location: 'middle'
+                });
+            } else {
+                alert(err.msg);
+                api.toast({
+                    msg: '添加失败,请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+    }
+    function getPicture1() {
+        api.getPicture({
+            sourceType: ['library', 'camera', 'album'],
+            encodingType: 'jpg',
+            mediaValue: 'pic',
+            destinationType: 'url',
+            allowEdit: false,
+            quality: 100,
+            saveToPhotoAlbum: false
+        }, function (ret, err) {
+            if (ret) {
+                picURL1 = ret.data;
+                $api.byId('pic1_name').textContent=picURL1.split('/').pop();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+    }
+    function getPicture2() {
+        api.getPicture({
+            sourceType: ['library', 'camera', 'album'],
+            encodingType: 'jpg',
+            mediaValue: 'pic',
+            destinationType: 'url',
+            allowEdit: false,
+            quality: 100,
+            saveToPhotoAlbum: false
+        }, function (ret, err) {
+            if (ret) {
+                picURL2 = ret.data;
+                $api.byId('pic2_name').textContent=picURL2.split('/').pop();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+    }
+    function getaudio() {
+        var fileBrowser = api.require('fileBrowser');
+        fileBrowser.open(function (ret) {
+            if (ret) {
+                audioURL = ret.url;
+                $api.byId('audio_name').textContent=audioURL.split('/').pop();
+            }
+        });
+    }
+
+
+
+
+
+</script>
+
+</html>

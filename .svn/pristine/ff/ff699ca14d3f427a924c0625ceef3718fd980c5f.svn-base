@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>查询用户数据</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: #f0f0f0;
+        }
+
+        .hightitem {
+            background-color: #fff;
+        }
+
+        .home-tuan-list .item {
+            position: relative;
+            display: block;
+            padding-left: 5px;
+        }
+
+        .home-tuan-list .cnt {
+            padding: 7px 10px 10px 0;
+            display: box;
+            display: -webkit-box;
+            height: 100px;
+            background-size: auto 1px;
+            border:solid;
+            width: 93%;
+        }
+
+        .home-tuan-list .wrap {
+            -webkit-box-flex: 1;
+        }
+
+        .home-tuan-list .wrap2 {
+            display: table;
+            height: 88px;
+            width: 100%;
+        }
+
+        .home-tuan-list .content {
+            -webkit-box-flex: 1;
+            box-flex: 1;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .home-tuan-list .shopname {
+            color: #666;
+            /*line-height: 16px;*/
+            font-size: 17px;
+            max-width: 11em;
+            white-space: nowrap;
+            word-wrap: normal;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            min-height: 10px;
+            padding-bottom: 2px;
+            padding-top: 3px;
+            display: inline-block;
+        }
+
+        .home-tuan-list .comment {
+            margin-bottom: 12px;
+            position: relative;
+            color: #666;
+            font-size: 17px;
+        }
+
+        .home-tuan-list .classify {
+            color: #666;
+            font-size: 17px;
+            
+        }
+
+        .Fix:after {
+            display: block;
+            content: '';
+            height: 0;
+            clear: both;
+        }
+
+        .presshover {
+            background-color: #FAFAFA !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1 列表 -->
+    <div class="home-tuan-list" id="app">
+        <a v-for="item in itemList" class="item Fix hightitem" tapmode="presshover">
+            <div class="cnt">
+                <div class="wrap">
+                    <div class="wrap2">
+                        <div class="content">
+                            <div class="shopname" id="wordsound">用户名:{{item.username}}</div>
+                                <div class="comment">密码:{{item.password}}</div>
+                                <div class="classify" id="word">
+                                    邮箱:{{item.mail}}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</body>
+
+</html>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/vue.min.js"></script>
+<script type="text/javascript">
+
+    var app = new Vue({
+        el: "#app",
+        data: {
+            itemList: [] // 初始化为空数组
+        }
+    });
+    apiready = function () {
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#C0C0C0',
+            isScale: true,
+            textDown: '下拉刷新...',
+            textUp: '松开刷新...',
+            textLoading: '正在刷新...'
+        }, function (ret, err) {
+            reloadList();
+            setTimeout(function () {
+                api.toast({
+                    msg: '刷新成功',
+                    duration: 2000,
+                    location: 'middle'
+                });
+                api.refreshHeaderLoadDone()
+            }, 1000);
+        });
+        api.ajax({
+            url: 'http://120.77.205.20:9090/admin/searchuser.php',
+            method: 'get',
+            dataType: 'json',
+        }, function (ret, err) {
+            if (ret) {
+                var userInfo = JSON.stringify(ret);
+                userInfo = JSON.parse(userInfo);
+                app.itemList = userInfo; // 将新数据赋值给 Vue 实例的 itemList 属性
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+
+
+    };
+    function reloadList() {
+        pageNum = 1;
+        api.showProgress({
+            title: '努力加载中...',
+            text: '请稍后...',
+            modal: false
+        });
+        api.ajax({
+            url: 'http://120.77.205.20:9090/admin/searchuser.php',
+            method: 'get',
+            dataType: 'json',
+        }, function (ret, err) {
+            if (ret) {
+                var userInfo = JSON.stringify(ret);
+                userInfo = JSON.parse(userInfo);
+                app.itemList = userInfo; // 将新数据赋值给 Vue 实例的 itemList 属性
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+        setTimeout('api.hideProgress()', '500');
+    }
+</script>

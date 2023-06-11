@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>修改用户数据Frame</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <style>
+        .row {
+            box-sizing: border-box;
+            width: auto;
+            height: 70px;
+            margin-left: 32px;
+            margin-right: 32px;
+            padding-top: 40px;
+            border-bottom: 1px solid #888;
+        }
+
+        .input {
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .btn {
+            width: auto;
+            height: 50px;
+            margin-left: 32px;
+            margin-right: 32px;
+            margin-top: 32px;
+            background-color: #ff7f27dc;
+            color: #fff;
+            font-size: 24px;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .highlight {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 输入框 -->
+
+    <div class="row">
+        <input id="oldemail" class="input" type="email" placeholder="旧邮箱">
+    </div>
+    <div class="row">
+        <input id="newemail" class="input" type="email" placeholder="新邮箱">
+    </div>
+    <div class="row">
+        <input id="username" class="input" type="text" placeholder="用户名">
+    </div>
+    <div class="row">
+        <input id="password" class="input" type="text" placeholder="密码">
+    </div>
+    <div class="btn" tapmode="highlight"onclick="modifyuser();">修改用户数据</div>
+    <div style="margin-left: 32px; margin-right: 32px; padding-top: 40px; color: red;">
+        词汇数据请通过删除原始数据后再重新上传！！！
+    </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript">
+
+    apiready = function () {
+        fnInitUIInput();
+    };
+
+    var UIInput;
+
+    var oldemailUIInputId;
+    var newemailUIInputId;
+    var usernameUIInputId;
+    var passwordUIInputId;
+    var oldemailValue;
+    var newemailValue;
+    var usernameValue;
+    var passwordValue;
+
+
+
+    function fnInitUIInput() {
+
+        UIInput = api.require('UIInput');
+        //旧邮箱输入框模块
+        var oldemail = $api.byId('oldemail');
+        var oldemailRect = $api.offset(oldemail);
+        UIInput.open({
+            rect: {
+                x: oldemailRect.l,
+                y: oldemailRect.t,
+                w: oldemailRect.w,
+                h: oldemailRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '旧邮箱',
+            keyboardType: 'default',
+            inputType: 'email',
+            fixedOn: api.frameName,
+            fixed:false,
+        }, function (ret, err) {
+            if (ret) {
+                oldemailUIInputId = ret.id;
+                if (ret && ret.eventType == "show") {
+                    setTimeout(function () {
+                        UIInput.popupKeyboard({
+                            id: oldemailUIInputId
+                        });
+                    }, 200);
+                } else if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: oldemailUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                oldemailValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        //新邮箱输入框模块
+        var newemail = $api.byId('newemail');
+        var newemailRect = $api.offset(newemail);
+        UIInput.open({
+            rect: {
+                x: newemailRect.l,
+                y: newemailRect.t,
+                w: newemailRect.w,
+                h: newemailRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '新邮箱',
+            keyboardType: 'default',
+            inputType: 'email',
+            fixedOn: api.frameName,
+            fixed:false,
+        }, function (ret, err) {
+            if (ret) {
+                newemailUIInputId = ret.id;
+                if (ret && ret.eventType == "show") {
+                    setTimeout(function () {
+                        UIInput.popupKeyboard({
+                            id: newemailUIInputId
+                        });
+                    }, 200);
+                } else if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: newemailUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                newemailValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        // 用户名输入框模块
+        var username = $api.byId('username');
+        var usernameRect = $api.offset(username);
+        UIInput.open({
+            rect: {
+                x: usernameRect.l,
+                y: usernameRect.t,
+                w: usernameRect.w,
+                h: usernameRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '新用户名',
+            keyboardType: 'default',
+            fixedOn: api.frameName,
+            fixed:false,
+        }, function (ret, err) {
+            if (ret) {
+                usernameUIInputId = ret.id;
+                if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: usernameUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                usernameValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        // 密码输入框模块
+        var password = $api.byId('password');
+        var passwordRect = $api.offset(password);
+        UIInput.open({
+            rect: {
+                x: passwordRect.l,
+                y: passwordRect.t,
+                w: passwordRect.w,
+                h: passwordRect.h
+            },
+            styles: {
+                bgColor: '#fff',
+                size: 16,
+                color: '#000',
+                placeholder: {
+                    color: '#ccc'
+                }
+            },
+            autoFocus: false,
+            maxRows: 1,
+            placeholder: '新密码',
+            keyboardType: 'default',
+            inputType: 'text',
+            fixedOn: api.frameName,
+            fixed:false,
+        }, function (ret, err) {
+            if (ret) {
+                passwordUIInputId = ret.id;
+                if (ret.eventType == "change") {
+                    UIInput.value({
+                        id: passwordUIInputId
+                    }, function (ret, err) {
+                        if (ret) {
+                            if (ret.status) {
+                                passwordValue = ret.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+    function modifyuser(){
+        if (!oldemailValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: oldemailUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: oldemailUIInputId
+                });
+            }
+            return;
+        }
+        if (!newemailValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: newemailUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: newemailUIInputId
+                });
+            }
+            return;
+        }
+        if (!usernameValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: usernameUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: usernameUIInputId
+                });
+            }
+            return;
+        }
+        if (!passwordValue) {
+            if (api.systemType == 'android') {
+                setTimeout(function () {
+                    UIInput.popupKeyboard({
+                        id: passwordUIInputId
+                    });
+                }, 200);
+            } else {
+                UIInput.popupKeyboard({
+                    id: passwordUIInputId
+                });
+            }
+            return;
+        }
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(oldemailValue)||!emailRegex.test(newemailValue)) {
+            alert("邮箱格式错误");
+            return;
+        }
+        // 接口
+        api.ajax({
+            url: 'http://120.77.205.20:9090/admin/modifyuser.php',
+            method: 'post',
+            dataType:"json",
+            data: {
+                values: {
+                    'username':usernameValue,
+                    "oldmail": oldemailValue,
+                    "mail":newemailValue,
+                    'password':passwordValue,
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                var urlJson = JSON.stringify(ret);
+                urlJson = JSON.parse(urlJson);
+                api.toast({
+                    msg: urlJson.msg,
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }else {
+                api.toast({
+                    msg: '添加失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+    }
+</script>
+
+</html>

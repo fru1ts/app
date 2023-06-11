@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>练习</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <style>
+        .container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+		}
+
+		.box {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			margin: 20px;
+			padding: 10px 20px;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+			background-color: #fff;
+			transform: translateZ(10px);
+			transition: transform 0.3s;
+            height: 100px;
+            width: 300px;
+		}
+
+		.box:hover {
+			transform: translateZ(20px);
+		}
+
+		.box-1 {
+			background-color: #0a76be;
+		}
+
+		.box-2 {
+			background-color: #e91e63;
+		}
+
+		.box-3 {
+			background-color: #4caf50;
+		}
+
+		.box-4 {
+			background-color: #ff9800;
+		}
+
+		.text {
+			color: #fff;
+			font-size: 20px;
+			font-weight: bold;
+			margin-left: 20px;
+		}
+    </style>
+</head>
+<body>
+    <div class="container">
+		<div class="box box-1" onclick="openprac1()">
+			<div class="text">长方形 1</div>
+		</div>
+		<div class="box box-2" onclick="openprac2()">
+			<div class="text">长方形 2</div>
+		</div>
+		<div class="box box-3" onclick="openprac3()">
+			<div class="text">长方形 3</div>
+		</div>
+		<div class="box box-4" onclick="openprac4()">
+			<div class="text">长方形 4</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript">
+
+	function openprac1()
+	{
+		api.openWin({
+			name: 'prac1',
+			url: './practice/prac1.html',
+			bounces: false,
+			delay:200
+		});
+	}
+    function openprac2()
+	{
+		api.openWin({
+			name: 'prac2',
+			url: './practice/prac2.html',
+			bounces: false,
+			delay:200
+		});
+	}
+    function openprac3()
+	{
+		api.openWin({
+			name: 'prac3',
+			url: './practice/prac3.html',
+			bounces: false,
+			delay:200
+		});
+	}
+    function openprac4()
+	{
+		api.openWin({
+			name: 'prac4',
+			url: './practice/prac4.html',
+			bounces: false,
+			delay:200
+		});
+	}
+    
+</script>

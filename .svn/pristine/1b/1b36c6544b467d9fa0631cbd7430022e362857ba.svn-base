@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>说明帮助</title>
+	<link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+	<link rel="stylesheet" type="text/css" href="../../css/style.css"/>
+	<style>
+            .intro{
+                position: relative;
+                width: 90%;
+                left: 5%;
+                font-size: 18px;
+                margin-top: 10px;
+            }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">用户说明帮助</h1>
+<div class="intro">
+&nbsp&nbsp欢迎使用我们的粤语学习平台！以下是一些有关平台功能和使用说明的帮助指南，以帮助您更好地了解和使用我们的服务。</br></br>
+
+【注册和登录】</br></br>
+&nbsp&nbsp注册新账户：点击注册按钮，填写必要信息，如用户名、电子邮件和密码，然后按照指示完成注册过程。</br></br>
+&nbsp&nbsp登录账户：在登录页面输入您的用户名和密码，然后点击登录按钮即可访问您的个人账户。</br></br>
+【忘记密码】</br></br>
+
+&nbsp&nbsp如果您忘记了密码，可以在登录页面点击“忘记密码”链接。</br>
+&nbsp&nbsp输入您注册时使用的电子邮件地址，我们将向该地址发送验证码进行密码重置。</br></br>
+
+【浏览、学习和收藏】</br></br>
+&nbsp&nbsp浏览词汇：使用平台提供的搜索功能，输入关键词来查找粤语词汇。</br></br>
+&nbsp&nbsp学习词汇：本平台提供词汇粤语音标，例句，例句粤语音标，结合音频和图片加深学习者的记忆。</br></br>
+&nbsp&nbsp收藏词汇：对于您感兴趣的词汇，可以点击收藏按钮将其保存到您的个人收藏夹中，方便日后查看。</br></br>
+
+【文字转粤语和音标】</br></br>
+&nbsp&nbsp输入转换：在相应的文本框中输入您想要转换成粤语的文字，然后点击转换按钮。</br></br>
+&nbsp&nbsp粤语转换：平台会将输入的文字转化为相应的粤语，并显示在结果框中。</br></br>
+&nbsp&nbsp音标转换：同时，平台还会为转化后的粤语提供音标显示，方便您学习和发音。</br></br>
+
+&nbsp&nbsp请注意：</br>
+
+&nbsp&nbsp平台提供的粤语转换和音标仅供参考和学习之用，可能会因输入文本的复杂性而有所变化。</br>
+&nbsp&nbsp平台上的词汇和内容是经过精心筛选和整理的，但仍然建议在其他资源的协助下进行深入学习和确认。</br>
+&nbsp&nbsp我们希望您在使用我们的粤语学习平台时有愉快的体验！如果您有任何疑问、建议或遇到技术问题，请随时联系我们的客户支持团队，我们将竭诚为您提供帮助。祝您学习进步，享受学习粤语的乐趣！</br>
+</div>
+</body>
+</html>

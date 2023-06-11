@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>词汇详情Frame</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <style>
+        html,
+        body {
+            height: 95%;
+            min-height: 100%;
+        }
+        .picture{
+            height: 35%;
+            max-width: 95%;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-left: 2%;
+        }
+        .picture img{
+            max-width: 100%; /* 图片的最大宽度为容器的宽度 */
+            height: auto; /* 根据宽度自动调整高度，保持图片比例 */
+        }
+    </style>
+</head>
+
+<body>
+<div id=app v-for="item in itemList">
+<div class="picture">
+    <img :src=item.picpath1 alt="1">
+</div>
+<div id=intro1 style="width: 95%; margin-left:2%;text-indent: 2em;"></div>
+<div class="picture">
+    <img :src=item.picpath2 alt="1">
+</div>
+<div id=intro2 style="width: 95%;margin-left:2%;text-indent: 2em;"></div>
+</div>
+</body>
+
+
+    
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/vue.min.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        var data = api.pageParam.data;
+        api.ajax({
+            url: data.intropath1,
+            method: 'get',
+            dataType: 'text',
+        }, function (ret, err) {
+            if (ret) {
+                $api.byId('intro1').innerText+=ret;
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+        api.ajax({
+            url: data.intropath2,
+            method: 'get',
+            dataType: 'text',
+        }, function (ret, err) {
+            if (ret) {
+                $api.byId('intro2').innerText+=ret;
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+        new Vue({
+            el: "#app",
+            data: {
+                itemList: [data]
+            },
+
+        });
+      
+    }
+</script>
+
+</html>
