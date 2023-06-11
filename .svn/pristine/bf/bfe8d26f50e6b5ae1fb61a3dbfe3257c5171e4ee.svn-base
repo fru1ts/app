@@ -206,8 +206,8 @@
 	}
 	function openState() {
 		api.openWin({
-			name: 'help',
-			url: './my/help.html',
+			name: 'state',
+			url: './my/state.html',
 			bounces: false,
 			delay: 200
 		});

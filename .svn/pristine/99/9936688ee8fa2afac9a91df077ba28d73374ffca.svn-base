@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>关于我们</title>
+	<link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+	<link rel="stylesheet" type="text/css" href="../../css/style.css"/>
+	<style>
+            .logo{
+            position: relative;
+			margin-top: 15%;
+			width: 100px;
+			left: 35%;
+            border-radius: 100px;  
+            }
+            .intro{
+                position: relative;
+                width: 90%;
+                left: 5%;
+                font-size: 18px;
+                margin-top: 10px;
+            }
+    </style>
+</head>
+<body>
+    <div></div>
+<div><img class="logo" src="../../image/my_about_us.png"></div>
+<div class="intro">
+&nbsp&nbsp欢迎来到粤方言学习平台！我们是一支热爱广东话的团队，致力于帮助广大学习者掌握粤方言。以下是关于我们的一些信息：</br></br>
+
+【我们的使命】</br></br>
+&nbsp&nbsp我们的使命是传承和弘扬广东文化，推广粤方言的学习和应用。我们相信语言是连接人与人之间的纽带，通过学习粤语话，我们希望能够加强人们之间的沟通和理解，促进文化交流和交融。</br></br>
+
+【我们的特点】</br></br>
+
+&nbsp&nbsp多样化的学习资源：我们提供丰富多样的学习资源，包括录音材料、词语练习等。学习者可以根据自己的需求和兴趣进行学习，轻松掌握广东话的基本表达和常用词汇。</br>
+
+&nbsp&nbsp个性化学习计划：我们根据学习者的水平和学习目标，制定个性化的学习计划。无论你是初学者还是已经有一定基础的学习者，我们都能够为你提供合适的学习内容和挑战，帮助你不断进步。</br></br>
+
+【联系我们】</br></br>
+&nbsp&nbsp如果你对我们的学习平台有任何疑问、建议或合作意向，请随时联系我们的客服团队。你可以通过以下方式与我们取得联系：</br>
+
+电话：XXX-XXXXXXX</br>
+邮箱：info@gdhualearning.com</br></br>
+感谢你选择粤方言学习平台！我们期待与你一起踏上粤语学习之旅，探索广东的魅力与文化！
+</div>
+</body>
+</html>

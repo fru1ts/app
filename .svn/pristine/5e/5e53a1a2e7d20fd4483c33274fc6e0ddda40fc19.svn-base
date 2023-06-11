@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>增加数据frame</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin: 20px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            transform: translateZ(10px);
+            transition: transform 0.3s;
+            height: 120px;
+            width: 300px;
+        }
+
+        .box:hover {
+            transform: translateZ(20px);
+        }
+
+        .box-1 {
+            background-color: #0a76be;
+        }
+
+        .box-2 {
+            background-color: #e91e63;
+        }
+
+        .text {
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="box box-1" onclick="openuserinfo()">
+            <div class="text">增加用户信息</div>
+        </div>
+        <div class="box box-2" onclick="openworddata()">
+            <div class="text">增加词汇数据</div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript">
+
+    function openuserinfo() {
+        api.openWin({
+            name: 'add_userinfo',
+            url: 'add_userinfo.html',
+            bounces: false,
+            delay: 200
+        });
+    }
+    function openworddata() {
+        api.openWin({
+            name: 'add_worddata',
+            url: 'add_worddata.html',
+            bounces: false,
+            delay: 200
+        });
+    }
+
+
+</script>

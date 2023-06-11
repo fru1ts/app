@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>文化</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: #f0f0f0;
+        }
+
+        #main {
+            position: absolute;
+            background-color: #f0f0f0;
+            padding:0,1em;
+            top:2px;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+        }
+
+        #act_detail_box {
+            width: 90%;
+            margin-top: 0px;
+            
+        }
+
+        #act_detail_box .act_detail_btn {
+            width: 100%;
+            position: relative;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            border: solid;
+            overflow: hidden;
+           
+        }
+
+        #act_detail_box img {
+            display: block;
+            width: 100%;
+            /*height: 100%;*/
+        }
+
+        #act_detail_box .statu {
+            position: absolute;
+            color: #FFF;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            font-size: 20px;
+        }
+
+        #act_detail_box .ing {
+            background-color: #ff7d27;
+
+        }
+
+        .act_detail_btn .title {
+            width: 100%;       
+            color: #ff7d27;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 30px;
+            line-height: 30px;
+            text-indent: 1em;
+            background-color: rgba(0, 0, 0, 0.377);
+        }
+
+        /*活动详情按钮end*/
+    </style>
+    ​
+
+</head>
+
+<body>
+    <div id="main">
+        <div id="act_detail_box">
+            <div v-for="item in itemList" class="act_detail_btn" @click="openDetail(item)">
+                <span class="statu ing">{{item.name}}</span>
+                <img :src="item.picpath1" :alt="1">
+                <span class="title"></span>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript">
+
+    function openDetail(item) {
+        api.openWin({
+            name: 'detail',
+            url: 'culture/cul.html',
+            bounces: false,
+            delay: 200,
+            pageParam: {
+                data: item
+            }
+        });
+    }
+    var app = new Vue({
+        el: "#act_detail_box",
+        data: {
+            itemList: [] // 初始化为空数组
+        }
+    });
+    apiready = function () {
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#C0C0C0',
+            isScale: true,
+            textDown: '下拉刷新...',
+            textUp: '松开刷新...',
+            textLoading: '正在刷新...'
+        }, function (ret, err) {
+            reloadList();
+            setTimeout(function () {
+                api.toast({
+                    msg: '刷新成功',
+                    duration: 2000,
+                    location: 'middle'
+                });
+                api.refreshHeaderLoadDone()
+            }, 1000);
+        });
+        api.ajax({
+            url: 'http://120.77.205.20:9090/culture.php',
+            method: 'get',
+            dataType: 'json',
+        }, function (ret, err) {
+            if (ret) {
+                var cultureInfo = JSON.stringify(ret);
+                cultureInfo = JSON.parse(cultureInfo);
+                app.itemList = cultureInfo;
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+
+
+    };
+    function reloadList() {
+        pageNum = 1;
+        api.showProgress({
+            title: '努力加载中...',
+            text: '请稍后...',
+            modal: false
+        });
+        api.ajax({
+            url: 'http://120.77.205.20:9090/culture.php',
+            method: 'get',
+            dataType: 'json',
+        }, function (ret, err) {
+            if (ret) {
+                var cultureInfo = JSON.stringify(ret);
+                cultureInfo = JSON.parse(cultureInfo);
+                app.itemList = cultureInfo;
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+        setTimeout('api.hideProgress()', '500');
+    }
+
+</script>
