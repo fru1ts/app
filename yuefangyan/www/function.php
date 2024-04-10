@@ -18,10 +18,10 @@ $mail->SMTPAuth = true;
 // qq 邮箱的 smtp服务器地址，这里当然也可以写其他的 smtp服务器地址
 $mail->Host = 'smtp.136.com';
 //smtp登录的账号 这里填入字符串格式的qq号即可
-$mail->Username = 'jiangxuan1014@163.com';
+$mail->Username = '';
 // 这个就是之前得到的授权码，一共16位
-$mail->Password = 'GIRBJVZZFZTAQXQY';
-$mail->setFrom('jiangxuan1014@163.com', 'send_user_name');
+$mail->Password = '';
+$mail->setFrom('', 'send_user_name'); //写发送人邮箱
 // $to 为收件人的邮箱地址，如果想一次性发送向多个邮箱地址，则只需要将下面这个方法多次调用即可
 $mail->addAddress($to);
 // 该邮件的主题
