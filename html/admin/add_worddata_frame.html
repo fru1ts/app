@@ -70,17 +70,20 @@
 
 <body>
     <!-- 输入框 -->
-    <div class="row">
+    <!-- <div class="row">
         <input id="wordsound" name="wordsound" class="input" type="text">
-    </div>
+    </div> -->
     <div class="row">
         <input id="word" name="word" class="input" type="text">
     </div>
-    <div class="row">
+    <!-- <div class="row">
         <input id="sentsound" name="sentsound" class="input" type="text">
-    </div>
-    <div class="row">
+    </div> -->
+    <!-- <div class="row">
         <input id="sentence" name="sentence" class="input" type="text">
+    </div> -->
+    <div class='file'>
+        <button type="button" onclick="gettxt()" name="button" class="upload-btn">上传解释</button><span id='explanation_name'></span>
     </div>
     <div class='file'>
         <button type="button" onclick="getPicture1()" name="button" class="upload-btn">上传图片1</button><span id='pic1_name'></span>
@@ -353,7 +356,7 @@
             return;
         }
         api.ajax({
-            url: 'http://120.77.205.20:9090/admin/addword.php',
+            url: 'http://8.138.10.69:9090/admin/addword.php',
             method: 'post',
             dataType: "json",
             data: {
@@ -432,6 +435,15 @@
             if (ret) {
                 audioURL = ret.url;
                 $api.byId('audio_name').textContent=audioURL.split('/').pop();
+            }
+        });
+    }
+    function gettxt() {
+        var fileBrowser = api.require('fileBrowser');
+        fileBrowser.open(function (ret) {
+            if (ret) {
+                audioURL = ret.url;
+                $api.byId('explanation_name').textContent=audioURL.split('/').pop();
             }
         });
     }

@@ -77,6 +77,17 @@
             text-indent: 1em;
             background-color: rgba(0, 0, 0, 0.377);
         }
+        .video-container {
+        width: 380px; /* 设置容器宽度 */
+        height: 200px; /* 设置容器高度 */
+        overflow: hidden; /* 控制溢出部分的隐藏 */
+        }
+
+        video {
+        width: 100%; /* 视频宽度填充容器 */
+        height: 100%; /* 视频高度填充容器 */
+        object-fit: cover; /* 控制视频填充方式 */
+        }
 
         /*活动详情按钮end*/
     </style>
@@ -87,10 +98,13 @@
 <body>
     <div id="main">
         <div id="act_detail_box">
-            <div v-for="item in itemList" class="act_detail_btn" @click="openDetail(item)">
+            <div v-for="item in itemList" class="act_detail_btn">
                 <span class="statu ing">{{item.name}}</span>
-                <img :src="item.picpath1" :alt="1">
-                <span class="title"></span>
+                <!--<img :src="item.picpath1" :alt="1">
+                <span class="title"></span> -->
+                <div class="video-container">
+                    <video :src="item.videopath" controls></video>
+                  </div>
             </div>
         </div>
     </div>
@@ -138,7 +152,7 @@
             }, 1000);
         });
         api.ajax({
-            url: 'http://120.77.205.20:9090/culture.php',
+            url: 'http://8.138.10.69:9090/country.php',
             method: 'get',
             dataType: 'json',
         }, function (ret, err) {
@@ -165,7 +179,7 @@
             modal: false
         });
         api.ajax({
-            url: 'http://120.77.205.20:9090/culture.php',
+            url: 'http://8.138.10.69:9090/country.php',
             method: 'get',
             dataType: 'json',
         }, function (ret, err) {

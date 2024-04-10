@@ -105,19 +105,13 @@
         <section v-for="item in itemList">
             <div id="picture" class="picture"></div>
             <audio id="audio" controls :src=item.audiopath></audio>
-            <div class="info-name">
+            <!-- <div class="info-name">
                 <div id="wordsound" class="name">{{item.wordsound}}</div>
-            </div>
+            </div> -->
             <div class="info-explain">
-                <div class="name">词语解释：</div>
-                <div class="value">{{item.word}}</div>
+                <div class="name">词语解释&nbsp;</div>
             </div>
-            <div class="info-sentence">
-                <div class="name">例句：</div>
-                <div class="value">{{item.sensound}}</div></br>
-                <div class="name">翻译：</div>
-                <div class="value">{{item.sentence}}</div>
-            </div>
+            <div id=intro style="width: 95%; margin-left:2%;text-indent: 2em;"></div>
         </section>
     </div>
 </body>
@@ -128,6 +122,21 @@
         // 初始化轮播图模块
         initUIScrollPicture();
         var data = api.pageParam.data;
+        api.ajax({
+            url: data.explanation,
+            method: 'get',
+            dataType: 'text',
+        }, function (ret, err) {
+            if (ret) {
+                $api.byId('intro').innerText+=ret;
+            } else {
+                api.toast({
+                    msg: '请求失败，请检查网络',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
         new Vue({
             el: "#app",
             data: {
